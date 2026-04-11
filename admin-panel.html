@@ -824,19 +824,7 @@ tbody tr:hover td{background:var(--s2);}
   <div class="mb wide">
     <div class="mh"><span id="moUrunTit">Yeni Ürün</span><button class="mx" onclick="closeMo('moUrun')">✕</button></div>
     <input type="hidden" id="urunId">
-    <div class="ig" style="margin-bottom:12px">
-      <label class="fl">Ürün Tipi</label>
-      <div style="display:flex;gap:8px;margin-top:4px">
-        <label style="display:flex;align-items:center;gap:6px;cursor:pointer;background:rgba(45,255,122,0.08);border:1.5px solid var(--green);border-radius:8px;padding:8px 14px;flex:1" id="tipPerakendeLbl">
-          <input type="radio" name="urunTipi" id="tipPerakende" value="perakende" checked onchange="urunTipiDegisti()" style="accent-color:var(--green)">
-          <span>🏪 Perakende</span>
-        </label>
-        <label style="display:flex;align-items:center;gap:6px;cursor:pointer;background:var(--bg2);border:1.5px solid var(--b1);border-radius:8px;padding:8px 14px;flex:1" id="tipToptanLbl">
-          <input type="radio" name="urunTipi" id="tipToptan" value="toptan" onchange="urunTipiDegisti()" style="accent-color:var(--green)">
-          <span>📦 Toptan</span>
-        </label>
-      </div>
-    </div>
+    <div class="ig" style="margin-bottom:12px"><label class="fl">Ürün Tipi</label><div style="display:flex;gap:8px;margin-top:4px"><label style="display:flex;align-items:center;gap:6px;cursor:pointer;background:rgba(45,255,122,0.08);border:1.5px solid var(--green);border-radius:8px;padding:8px 14px;flex:1" id="tipPerakendeLbl"><input type="radio" name="urunTipi" id="tipPerakende" value="perakende" checked onchange="urunTipiDegisti()" style="accent-color:var(--green)"><span>🏪 Perakende</span></label><label style="display:flex;align-items:center;gap:6px;cursor:pointer;background:var(--s2);border:1.5px solid var(--b1);border-radius:8px;padding:8px 14px;flex:1" id="tipToptanLbl"><input type="radio" name="urunTipi" id="tipToptan" value="toptan" onchange="urunTipiDegisti()" style="accent-color:var(--green)"><span>📦 Toptan</span></label></div></div>
     <div class="fg">
       <div class="ig"><label class="fl">Ürün Adı (TR)</label><input class="fi" id="urunAd" placeholder="Antep Fıstığı Kavrulmuş"></div>
       <div class="ig"><label class="fl">Ürün Adı (EN)</label><input class="fi" id="urunAdEn" placeholder="Roasted Pistachios"></div>
@@ -998,40 +986,17 @@ tbody tr:hover td{background:var(--s2);}
     <div class="mh"><span id="moPyTit">Pazaryeri Tanımla</span><button class="mx" onclick="closeMo('moPy')">✕</button></div>
     <input type="hidden" id="pyId">
     <div style="font-size:11px;font-weight:800;color:var(--t3);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">Temel Bilgiler</div>
-    <div class="fg">
-      <div class="ig"><label class="fl">Platform</label>
-        <select class="fsel" id="pyPlatform" onchange="pyPlatformDegisti()">
-          <option>Trendyol</option><option>Hepsiburada</option><option>Amazon</option><option>N11</option><option value="Ciceksepeti">Çiçeksepeti</option><option>Epttavm</option><option>Pazarama</option><option>B2C</option><option value="Diger">Diğer</option>
-        </select>
-      </div>
-      <div class="ig"><label class="fl">Ürün</label><select class="fsel" id="pyUrun"><option value="">-- Seç --</option></select></div>
-      <div class="ig"><label class="fl">Platform SKU</label><input class="fi" id="pySku" placeholder="Opsiyonel"></div>
-    </div>
+    <div class="fg"><div class="ig"><label class="fl">Platform</label><select class="fsel" id="pyPlatform" onchange="pyPlatformDegisti()"><option>Trendyol</option><option>Hepsiburada</option><option>Amazon</option><option>N11</option><option value="Ciceksepeti">Çiçeksepeti</option><option>Epttavm</option><option>Pazarama</option><option>B2C</option><option value="Diger">Diğer</option></select></div><div class="ig"><label class="fl">Ürün</label><select class="fsel" id="pyUrun"><option value="">-- Seç --</option></select></div><div class="ig"><label class="fl">Platform SKU</label><input class="fi" id="pySku" placeholder="Opsiyonel"></div></div>
     <div style="border-top:1px solid var(--b1);margin:10px 0"></div>
     <div style="font-size:11px;font-weight:800;color:var(--t3);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">Komisyon & Kâr</div>
-    <div class="fg">
-      <div class="ig"><label class="fl">Komisyon (%)</label><input class="fi" type="number" id="pyKomisyon" step="0.1" placeholder="15" oninput="pyHesapla()"></div>
-      <div class="ig"><label class="fl">Kâr (%)</label><input class="fi" type="number" id="pyKar" step="0.1" placeholder="30" oninput="pyHesapla()"></div>
-      <div class="ig"><label class="fl">Sabit Gider (₺)</label><input class="fi" type="number" id="pySabit" step="0.01" placeholder="0" oninput="pyHesapla()"></div>
-    </div>
+    <div class="fg"><div class="ig"><label class="fl">Komisyon (%)</label><input class="fi" type="number" id="pyKomisyon" step="0.1" placeholder="15" oninput="pyHesapla()"></div><div class="ig"><label class="fl">Kâr (%)</label><input class="fi" type="number" id="pyKar" step="0.1" placeholder="30" oninput="pyHesapla()"></div><div class="ig"><label class="fl">Sabit Gider (₺)</label><input class="fi" type="number" id="pySabit" step="0.01" placeholder="0" oninput="pyHesapla()"></div></div>
     <div style="border-top:1px solid var(--b1);margin:10px 0"></div>
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
-      <div style="font-size:11px;font-weight:800;color:var(--t3);text-transform:uppercase;letter-spacing:1px">Kargo Kademeleri</div>
-      <button class="btn btn-g btn-xs" onclick="pyKargoEkle()" type="button">+ Kademe Ekle</button>
-    </div>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px"><div style="font-size:11px;font-weight:800;color:var(--t3);text-transform:uppercase;letter-spacing:1px">Kargo Kademeleri</div><button class="btn btn-g btn-xs" onclick="pyKargoEkle()" type="button">+ Kademe Ekle</button></div>
     <div id="pyKargoList"></div>
     <div style="border-top:1px solid var(--b1);margin:10px 0"></div>
     <div style="font-size:11px;font-weight:800;color:var(--t3);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">Fiyat Simülasyonu</div>
-    <div class="fg">
-      <div class="ig"><label class="fl">Test Maliyeti (₺)</label><input class="fi" type="number" id="pyMaliyet" step="0.01" placeholder="100" oninput="pyHesapla()"></div>
-      <div class="ig"><label class="fl">Kargo (₺)</label><input class="fi" type="number" id="pyKargo" step="0.01" placeholder="otomatik" oninput="pyHesapla()"></div>
-      <div class="ig fg1"><label class="fl">Hesaplanan Fiyat</label><input class="fi" id="pySonFiyat" readonly style="color:var(--green);font-weight:800;font-size:15px"></div>
-    </div>
-    <div class="mfoot">
-      <button class="btn btn-p" onclick="savePyFull()">Kaydet</button>
-      <button class="btn btn-g" onclick="closeMo('moPy')">İptal</button>
-      <button class="btn btn-d btn-sm ml" id="pyDelBtn" onclick="deletePy()" style="display:none">Sil</button>
-    </div>
+    <div class="fg"><div class="ig"><label class="fl">Test Maliyeti (₺)</label><input class="fi" type="number" id="pyMaliyet" step="0.01" placeholder="100" oninput="pyHesapla()"></div><div class="ig"><label class="fl">Kargo (₺)</label><input class="fi" type="number" id="pyKargo" step="0.01" placeholder="otomatik" oninput="pyHesapla()"></div><div class="ig fg1"><label class="fl">Hesaplanan Fiyat</label><input class="fi" id="pySonFiyat" readonly style="color:var(--green);font-weight:800;font-size:15px"></div></div>
+    <div class="mfoot"><button class="btn btn-p" onclick="savePyFull()">Kaydet</button><button class="btn btn-g" onclick="closeMo('moPy')">İptal</button><button class="btn btn-d btn-sm ml" id="pyDelBtn" onclick="deletePy()" style="display:none">Sil</button></div>
   </div>
 </div>
 
@@ -1098,8 +1063,10 @@ tbody tr:hover td{background:var(--s2);}
       <div class="ig"><label class="fl">Birim</label><select class="fsel" id="hmBirim"><option value="kg">kg</option><option value="adet">adet</option><option value="lt">lt</option><option value="gr">gr</option></select></div>
       <div class="ig"><label class="fl">Stok</label><input class="fi" type="number" id="hmStok" placeholder="0" step="0.01"></div>
       <div class="ig"><label class="fl">Kritik Stok</label><input class="fi" type="number" id="hmKritik" placeholder="10" step="0.01"></div>
+      <div class="ig"><label class="fl">Maliyet/Birim</label><input class="fi" type="number" id="hmMaliyet" step="0.01" placeholder="0.00"></div>
+      <div class="ig"><label class="fl">Para Birimi</label><select class="fsel" id="hmPb"><option value="TRY">TRY ₺</option><option value="USD">USD $</option><option value="EUR">EUR €</option></select></div>
       <div class="ig fg1"><label class="fl">Tedarikçi</label><input class="fi" id="hmTedarikci" placeholder="Tedarikçi adı"></div>
-      <div class="ig fg1"><label class="fl">Raf <span style="color:#ff5555">*</span> <span style="font-size:10px;color:var(--t3)">Personel bu raftan alir</span></label><select class="fsel" id="hmRaf"><option value="">-- Raf Sec --</option></select></div>
+      <div class="ig fg1"><label class="fl">Raf <span style="color:#ff5555">*</span> <span style="font-size:10px;color:var(--t3)">Personel bu raftan alır</span></label><select class="fsel" id="hmRaf"><option value="">-- Raf Seç --</option></select></div>
     </div>
     <div class="mfoot">
       <button class="btn btn-p" onclick="saveHm()">Kaydet</button>
@@ -1909,9 +1876,17 @@ async function fetchSentosPlatformlar(){const el=document.getElementById('sentos
 async function loadTanimlamalar(){await Promise.all([loadHm(),loadPaket(),loadRaf(),loadIscilik(),loadSabit(),loadMarka(),loadCins()]);}
 
 async function loadHm(){const t=document.getElementById('hmTbl');t.innerHTML=loadRow(8);try{allHm=await api('hammadde?order=ad.asc&select=*')||[];t.innerHTML=allHm.length?allHm.map(h=>`<tr><td><strong>${h.ad}</strong></td><td>${h.birim||'—'}</td><td>${h.stok_kg||0}</td><td>${h.kritik_stok_kg||0}</td><td>${fmtMoney(h.maliyet_birim,h.para_birimi)}</td><td>${h.para_birimi||'TRY'}</td><td>${h.tedarikci||'—'}</td><td><button class="btn btn-g btn-xs" onclick='editHm(${JSON.stringify(h).replace(/'/g,"&#39;")})'>Düzenle</button></td></tr>`).join(''):emptyRow(8,'Ham madde yok');}catch{t.innerHTML=emptyRow(8);}}
-function openHm(){document.getElementById('hmId').value='';['hmAd','hmStok','hmKritik','hmTedarikci'].forEach(id=>document.getElementById(id).value='');document.getElementById('hmBirim').value='kg';document.getElementById('hmPb').value='TRY';document.getElementById('moHmTit').textContent='Yeni Ham Madde';document.getElementById('hmDelBtn').style.display='none';openMo('moHm');}
-function editHm(h){document.getElementById('hmId').value=h.id;document.getElementById('hmAd').value=h.ad||'';document.getElementById('hmBirim').value=h.birim||'kg';document.getElementById('hmStok').value=h.stok_kg||'';document.getElementById('hmKritik').value=h.kritik_stok_kg||'';document.getElementById('hmTedarikci').value=h.tedarikci||'';document.getElementById('moHmTit').textContent='Ham Madde Düzenle';document.getElementById('hmDelBtn').style.display='inline-flex';openMo('moHm');}
-async function saveHm(){const id=document.getElementById('hmId').value;const body={ad:document.getElementById('hmAd').value.trim(),birim:document.getElementById('hmBirim').value,stok_kg:parseFloat(document.getElementById('hmStok').value)||0,kritik_stok_kg:parseFloat(document.getElementById('hmKritik').value)||0,tedarikci:document.getElementById('hmTedarikci').value||null,aktif:true};if(!body.ad){toast('Ad zorunludur','err');return;}try{if(id)await api(`hammadde?id=eq.${id}`,{method:'PATCH',body:JSON.stringify(body)});else await api('hammadde',{method:'POST',body:JSON.stringify(body)});toast('Kaydedildi!');closeMo('moHm');loadHm();CACHE.hmList=null;}catch(e){toast('Hata: '+e.message,'err');}}
+function openHm(){document.getElementById('hmId').value='';['hmAd','hmStok','hmKritik','hmMaliyet','hmTedarikci'].forEach(id=>document.getElementById(id).value='');document.getElementById('hmBirim').value='kg';document.getElementById('hmPb').value='TRY';document.getElementById('moHmTit').textContent='Yeni Ham Madde';document.getElementById('hmDelBtn').style.display='none';openMo('moHm');}
+function editHm(h){document.getElementById('hmId').value=h.id;document.getElementById('hmAd').value=h.ad||'';document.getElementById('hmBirim').value=h.birim||'kg';document.getElementById('hmStok').value=h.stok_kg||'';document.getElementById('hmKritik').value=h.kritik_stok_kg||'';document.getElementById('hmMaliyet').value=h.maliyet_birim||'';document.getElementById('hmPb').value=h.para_birimi||'TRY';document.getElementById('hmTedarikci').value=h.tedarikci||'';document.getElementById('moHmTit').textContent='Ham Madde Düzenle';document.getElementById('hmDelBtn').style.display='inline-flex';openMo('moHm');}
+async function saveHm(){
+  const id=document.getElementById('hmId').value;
+  const rafId=document.getElementById('hmRaf').value;
+  if(!rafId){toast('Raf seçimi zorunludur!','err');return;}
+  const body={ad:document.getElementById('hmAd').value.trim(),birim:document.getElementById('hmBirim').value,stok_kg:parseFloat(document.getElementById('hmStok').value)||0,kritik_stok_kg:parseFloat(document.getElementById('hmKritik').value)||0,tedarikci:document.getElementById('hmTedarikci').value||null,raf_id:rafId,aktif:true};
+  if(!body.ad){toast('Ad zorunludur!','err');return;}
+  try{if(id)await api('hammadde?id=eq.'+id,{method:'PATCH',body:JSON.stringify(body)});else await api('hammadde',{method:'POST',body:JSON.stringify(body)});toast('Kaydedildi');closeMo('moHm');loadHm();CACHE.hmList=null;}catch(e){toast('Hata: '+e.message,'err');}
+}
+
 async function deleteHm(){const id=document.getElementById('hmId').value;if(!confirm('Silmek istediğinize emin misiniz?'))return;try{await api(`hammadde?id=eq.${id}`,{method:'DELETE'});toast('Silindi.');closeMo('moHm');loadHm();}catch{toast('Silinemedi','err');}}
 
 async function loadPaket(){const t=document.getElementById('paketTbl');t.innerHTML=loadRow(7);try{allPaket=await api('paket?order=paket_kodu.asc&select=*')||[];t.innerHTML=allPaket.length?allPaket.map(p=>`<tr><td class="mono">${p.paket_kodu}</td><td><strong>${p.ad}</strong></td><td>${p.stok_adet||0}</td><td>${p.kritik_stok_adet||0}</td><td>${fmtMoney(p.birim_fiyat,p.para_birimi)}</td><td>${p.para_birimi||'TRY'}</td><td><button class="btn btn-g btn-xs" onclick='editPaket(${JSON.stringify(p).replace(/'/g,"&#39;")})'>Düzenle</button></td></tr>`).join(''):emptyRow(7,'Paket yok');}catch{t.innerHTML=emptyRow(7);}}
@@ -2096,46 +2071,57 @@ async function getAiYanit(msg){
   return `"${msg}" için: Stok durumu, üretim listesi, personel verimliliği, ürün raf bilgisi, döviz kuru gibi konularda gerçek veri ile yanıt verebilirim. Daha spesifik sorun!`;
 }
 
-// ── Ham madde raf desteği ──
-const _origOpenHm = openHm;
-
-
-// ── saveHm - fiyat yok, raf zorunlu ──
-
-
-// ── Ürün tipi ──
-function urunTipiDegisti(){
-  const tip=document.querySelector('input[name="urunTipi"]:checked')?.value||'perakende';
-  document.getElementById('tipPerakendeLbl').style.cssText='display:flex;align-items:center;gap:6px;cursor:pointer;background:'+(tip==='perakende'?'rgba(45,255,122,0.08)':'var(--bg2)')+';border:1.5px solid '+(tip==='perakende'?'var(--green)':'var(--b1)')+';border-radius:8px;padding:8px 14px;flex:1';
-  document.getElementById('tipToptanLbl').style.cssText='display:flex;align-items:center;gap:6px;cursor:pointer;background:'+(tip==='toptan'?'rgba(45,255,122,0.08)':'var(--bg2)')+';border:1.5px solid '+(tip==='toptan'?'var(--green)':'var(--b1)')+';border-radius:8px;padding:8px 14px;flex:1';
-}
-
-// ── Pazaryeri - komisyon+kargo tek formda ──
+// YENİ
+function urunTipiDegisti(){const tip=document.querySelector('input[name="urunTipi"]:checked')?.value||'perakende';['tipPerakendeLbl','tipToptanLbl'].forEach(id=>{const el=document.getElementById(id);if(el){el.style.background='var(--s2)';el.style.borderColor='var(--b1)';}});const sel=document.getElementById(tip==='perakende'?'tipPerakendeLbl':'tipToptanLbl');if(sel){sel.style.background='rgba(45,255,122,0.08)';sel.style.borderColor='var(--green)';}}
 let pyKademeSayac=0;
-function pyPlatformDegisti(){
-  const plt=document.getElementById('pyPlatform').value;
-  const kom={Trendyol:15,Hepsiburada:14,Amazon:15,N11:12,Ciceksepeti:15,Epttavm:12,Pazarama:12,B2C:0,Diger:10};
-  document.getElementById('pyKomisyon').value=kom[plt]||15;
-  const mevcut=(allKargo||[]).filter(k=>k.platform===plt&&k.aktif);
-  const list=document.getElementById('pyKargoList');
-  if(list){list.innerHTML='';pyKademeSayac=0;
-    if(mevcut.length>0){mevcut.forEach(k=>pyKargoEkle(k.alt_limit,k.ust_limit,k.kargo_ucreti,k.id));}
-    else{pyKargoEkle(0,199.99,42);pyKargoEkle(200,349.99,72);pyKargoEkle(350,'',94);}
-  }
-  pyHesapla();
-}
-function pyKargoEkle(alt,ust,ucret,eid){
-  const id=++pyKademeSayac;
-  const list=document.getElementById('pyKargoList');
-  if(!list)return;
-  const row=document.createElement('div');
-  row.id='pyk_'+id;
-  row.style.cssText='display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:6px;align-items:end;background:var(--bg2);padding:8px;border-radius:8px;border:1px solid var(--b1);margin-bottom:4px';
-  const inp0='<input type="hidden" class="pyki" value="'+(eid||'')+'"><div>';
-  const inp1='<label style="font-size:10px;color:var(--t3);display:block">Alt Limit</label><input type="number" class="fi pyka" value="'+(alt||0)+'" step="0.01"></div>';
-  const inp2='<div><label style="font-size:10px;color:var(--t3);display:block">Ust Limit</label><input type="number" class="fi pyku" value="'+(ust||'')+'" step="0.01"></div>';
-  const inp3='<div><label style="font-size:10px;color:var(--t3);display:block">Kargo</label><input type="number" class="fi pyke" value="'+(ucret||'')+'" step="0.01" oninput="pyHesapla()"></div>';
-  const btn='<button onclick="document.getElementById(\'pyk_'+id+'\').remove()" style="background:rgba(255,85,85,0.1);color:#ff5555;border:1px solid rgba(255,85,85,0.2);border-radius:6px;padding:8px;cursor:pointer">X</button>';
-  row.innerHTML=inp0+inp1+inp2+inp3+btn;
-  list.appendChild(row);
-}
+function pyPlatformDegisti(){const plt=document.getElementById('pyPlatform').value;const kom={Trendyol:15,Hepsiburada:14,Amazon:15,N11:12,Ciceksepeti:15,Epttavm:12,Pazarama:12,B2C:0,Diger:10};document.getElementById('pyKomisyon').value=kom[plt]||15;const mevcut=(allKargo||[]).filter(k=>k.platform===plt&&k.aktif);const list=document.getElementById('pyKargoList');if(list){list.innerHTML='';pyKademeSayac=0;if(mevcut.length>0)mevcut.forEach(k=>pyKargoEkle(k.alt_limit,k.ust_limit,k.kargo_ucreti,k.id));else{pyKargoEkle(0,199.99,42);pyKargoEkle(200,349.99,72);pyKargoEkle(350,'',94);}}pyHesapla();}
+function pyKargoEkle(alt,ust,ucret,eid){const id=++pyKademeSayac;const list=document.getElementById('pyKargoList');if(!list)return;const row=document.createElement('div');row.id='pyk_'+id;row.style.cssText='display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:6px;align-items:end;background:var(--s2);padding:8px;border-radius:8px;border:1px solid var(--b1);margin-bottom:4px';const inp=document.createElement('input');inp.type='hidden';inp.className='pyki';inp.value=eid||'';
+const d1=document.createElement('div');d1.innerHTML='<label style="font-size:10px;color:var(--t3);display:block">Alt</label><input type="number" class="fi pyka" value="'+(alt||0)+'" step="0.01">';
+const d2=document.createElement('div');d2.innerHTML='<label style="font-size:10px;color:var(--t3);display:block">Ust</label><input type="number" class="fi pyku" value="'+(ust||'')+'" step="0.01">';
+const d3=document.createElement('div');d3.innerHTML='<label style="font-size:10px;color:var(--t3);display:block">Kargo</label><input type="number" class="fi pyke" value="'+(ucret||'')+'" step="0.01" oninput="pyHesapla()">';
+const btn=document.createElement('button');btn.textContent='X';btn.type='button';btn.style.cssText='background:rgba(255,85,85,0.1);color:#ff5555;border:1px solid rgba(255,85,85,0.2);border-radius:6px;padding:8px;cursor:pointer;align-self:end';btn.onclick=function(){row.remove();};row.appendChild(inp);row.appendChild(d1);row.appendChild(d2);row.appendChild(d3);row.appendChild(btn);list.appendChild(row);}
+async function openPazaryeriNew(){if(!CACHE.urunList)CACHE.urunList=await api('urun?aktif=eq.true&select=id,ad').catch(()=>[]);fillSel('pyUrun',CACHE.urunList,'id','ad','-- Ürün Seç --');['pyId','pySku','pyMaliyet','pyKargo','pySonFiyat'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});if(document.getElementById('pyKar'))document.getElementById('pyKar').value='30';if(document.getElementById('pySabit'))document.getElementById('pySabit').value='0';if(document.getElementById('moPyTit'))document.getElementById('moPyTit').textContent='Pazaryeri Tanımla';if(document.getElementById('pyDelBtn'))document.getElementById('pyDelBtn').style.display='none';pyKademeSayac=0;pyPlatformDegisti();openMo('moPy');}
+async function savePyFull(){const id=document.getElementById('pyId')?.value;const plt=document.getElementById('pyPlatform')?.value;const uEl=document.getElementById('pyUrun');const body={platform:plt,urun_id:uEl?.value||null,urun_adi:uEl?.value?(uEl.options[uEl.selectedIndex]?.text||null):null,sku:document.getElementById('pySku')?.value||null,komisyon_orani:(parseFloat(document.getElementById('pyKomisyon')?.value)||0)/100,kar_orani:1+(parseFloat(document.getElementById('pyKar')?.value)||0)/100,sabit_gider:parseFloat(document.getElementById('pySabit')?.value)||0,son_fiyat:parseFloat(document.getElementById('pySonFiyat')?.value)||null,aktif:true};try{if(id)await api('pazaryeri?id=eq.'+id,{method:'PATCH',body:JSON.stringify(body)});else await api('pazaryeri',{method:'POST',body:JSON.stringify(body)});const rows=document.querySelectorAll('#pyKargoList > div[id^="pyk_"]');for(const row of rows){const kid=row.querySelector('.pyki')?.value,alt=parseFloat(row.querySelector('.pyka')?.value)||0,ustV=row.querySelector('.pyku')?.value,ust=ustV?parseFloat(ustV):null,ucret=parseFloat(row.querySelector('.pyke')?.value)||0,kb={platform:plt,alt_limit:alt,ust_limit:ust,kargo_ucreti:ucret,aktif:true};if(kid)await api('kargo_kademesi?id=eq.'+kid,{method:'PATCH',body:JSON.stringify(kb)});else await api('kargo_kademesi',{method:'POST',body:JSON.stringify(kb)});}toast('Kaydedildi ✓');closeMo('moPy');loadPazaryeri();}catch(e){toast('Hata: '+e.message,'err');}}
+</script>
+
+</body>
+</html// AUTH
+// NAV
+const TITLES={karraporu:'Kâr Raporu',dashboard:'Genel Bakış',uretim:'Üretim Planla',malkabul:'Mal Kabul',urunler:'Ürün Listesi',recete:'Reçeteler',etiket:'Etiket Şablonları',depo:'Depo Konumları',lot:'Lot Takibi',pazaryeri:'Pazaryeri Fiyatları',musteri:'Müşteri Fiyatları',sentos:'Sentos Ürünleri',tanimlamalar:'Tanımlamalar',personel:'Personel',tickets:'Destek Talepleri'};
+const LOADERS={karraporu:loadKarRaporu,dashboard:loadDashboard,uretim:loadUretimPage,malkabul:loadMalKabul,urunler:loadUrunler,depo:loadDepo,lot:loadLot,pazaryeri:loadPazaryeri,musteri:loadMusteri,sentos:loadSentos,tanimlamalar:loadTanimlamalar,personel:loadPersonel,tickets:loadTickets};
+let curPage='dashboard';
+// HELPERS
+document.querySelectorAll('.mo').forEach(o=>o.addEventListener('click',e=>{if(e.target===o)o.classList.remove('show');}));
+document.addEventListener('keydown',e=>{if(e.key==='Escape')document.querySelectorAll('.mo.show').forEach(m=>m.classList.remove('show'));});
+// DÖVİZ
+// BİLDİRİM
+document.addEventListener('click',()=>document.getElementById('ndrop')?.classList.remove('show'));
+
+// DASHBOARD
+// ÜRETİM
+// MAL KABUL
+// ÜRÜNLER
+// REÇETE
+// ETİKET
+// DEPO
+// LOT
+// PAZARYERİ
+// MÜŞTERİ
+// SENTOS
+
+// ══ KÂR RAPORU ══
+let karSiparisler=[];
+
+// ══ ÜRETİM TAMAMLANINCA SENTOS'A FİYAT+STOK GÖNDER ══
+// ══ SENTOS ENTEGRASYON ══
+let sentosOrdersData=[],sentosIadeData=[];
+// TANIMLAMALAR
+// ENTEGRASYON
+// PERSONEL
+// TİCKETS
+// AI ASISTAN
+let aiOpen=false;
+</script>
+
+</body>
+</html>
