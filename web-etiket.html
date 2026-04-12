@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PeaksFood — Etiket Çıkar</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jsbarcode/3.11.5/JsBarcode.all.min.js"></script>
+<style>
+:root{
+  --bg:#0a0f0d;--surface:#111a15;--surface2:#162019;--border:#1e2e23;
+  --accent:#2dff7a;--accent-dark:#1a9947;--text:#e8f0ea;--text-muted:#6b8a72;
+  --text-dim:#3d5442;--info:#4d9fff;--warning:#ffb84d;--font:'Poppins',sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:100vh;}
+.hdr{position:sticky;top:0;z-index:100;background:rgba(10,15,13,0.97);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:0 20px;height:56px;display:flex;align-items:center;justify-content:space-between;}
+.logo-nav{font-size:15px;font-weight:900;color:var(--accent);}
+.hdr-right{display:flex;align-items:center;gap:10px;}
+.user-chip{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:5px 12px;font-size:12px;color:var(--text-muted);display:flex;align-items:center;gap:6px;}
+.user-chip .dot{width:7px;height:7px;border-radius:50%;background:var(--info);}
+.geri-btn{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:6px 12px;color:var(--text-muted);font-family:var(--font);font-size:12px;font-weight:600;cursor:pointer;}
+.geri-btn:hover{border-color:var(--accent);color:var(--accent);}
+.asama-bar{background:var(--surface);border-bottom:1px solid var(--border);padding:8px 20px;display:flex;align-items:center;gap:4px;}
+.as{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:600;white-space:nowrap;}
+.as-num{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;flex-shrink:0;}
+.as.tamam .as-num{background:var(--accent-dark);color:#fff;}
+.as.aktif .as-num{background:var(--info);color:#fff;}
+.as.bekliyor .as-num{background:var(--surface2);border:1px solid var(--border);color:var(--text-dim);}
+.as.tamam span{color:var(--accent-dark);}
+.as.aktif span{color:var(--info);}
+.as.bekliyor span{color:var(--text-dim);}
+.as-cizgi{width:20px;height:1px;flex-shrink:0;}
+.as-cizgi.tamam{background:var(--accent-dark);}
+.as-cizgi.bekliyor{background:var(--border);}
+.wrap{max-width:720px;margin:0 auto;padding:20px 16px 48px;}
+.kart{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:14px;position:relative;overflow:hidden;}
+.kart::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;}
+.kart.info::before{background:var(--info);}
+.kart.green::before{background:var(--accent);}
+.kart-baslik{font-size:10px;font-weight:800;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:14px;}
+.bilgi-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.bilgi-alan .k{font-size:10px;color:var(--text-muted);font-weight:700;text-transform:uppercase;letter-spacing:0.5px;display:block;margin-bottom:3px;}
+.bilgi-alan .v{font-size:14px;font-weight:800;}
+.bilgi-alan .v.accent{color:var(--accent);}
+.bilgi-alan .v.info{color:var(--info);}
+.bilgi-alan .v.warning{color:var(--warning);}
+.alan label{display:block;font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;}
+.inp-wrap{background:var(--surface2);border:1.5px solid var(--border);border-radius:10px;padding:13px 14px;display:flex;align-items:center;gap:10px;transition:border-color 0.2s;margin-bottom:6px;}
+.inp-wrap:focus-within{border-color:var(--accent);}
+.inp-wrap input{flex:1;background:none;border:none;outline:none;color:var(--text);font-family:var(--font);font-size:20px;font-weight:700;-moz-appearance:textfield;width:100%;}
+.inp-wrap input::-webkit-outer-spin-button,.inp-wrap input::-webkit-inner-spin-button{-webkit-appearance:none;}
+.inp-wrap input::placeholder{color:var(--text-dim);font-weight:400;font-size:15px;}
+.inp-birim{font-size:13px;font-weight:700;color:var(--text-muted);}
+.inp-not{font-size:11px;color:var(--text-dim);}
+.btn-yazdir{width:100%;padding:15px;border:2px solid rgba(77,159,255,0.3);border-radius:12px;background:rgba(77,159,255,0.07);color:var(--info);font-family:var(--font);font-size:14px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;text-transform:uppercase;margin-bottom:8px;transition:all 0.2s;}
+.btn-yazdir:hover{background:rgba(77,159,255,0.14);}
+.yazdir-not{font-size:11px;color:var(--text-dim);text-align:center;margin-bottom:14px;}
+.btn-basla{width:100%;padding:18px;border:none;border-radius:14px;background:var(--accent);color:#0a0f0d;font-family:var(--font);font-size:17px;font-weight:900;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;text-transform:uppercase;transition:all 0.2s;}
+.btn-basla:hover{box-shadow:0 6px 20px rgba(45,255,122,0.3);}
+.btn-basla:disabled{opacity:0.4;cursor:not-allowed;}
+.onizleme-baslik{font-size:10px;font-weight:800;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;}
+
+/* ============================================ */
+/* ETİKET — Fotoğraftaki birebir düzen          */
+/* Sol: ürün adı + içerik | Sağ: logo           */
+/* Alt: ikonlar | barkod | firma+tett           */
+/* ============================================ */
+.etiket-wrapper{
+  background:#d0d0d0;
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:14px;
+  margin-bottom:14px;
+  overflow-x:auto;
+}
+.etiket{
+  background:#fff;
+  width:100%;
+  max-width:560px;
+  margin:0 auto;
+  font-family:Arial,Helvetica,sans-serif;
+  color:#000;
+  border:1px solid #999;
+  position:relative;
+  font-size:7.5px;
+  line-height:1.5;
+}
+
+/* ÜST BÖLÜM — sol içerik + sağ logo */
+.et-ust{
+  display:grid;
+  grid-template-columns:1fr 110px;
+  border-bottom:1.5px solid #333;
+  min-height:140px;
+}
+
+/* SOL — ürün adı + içerikler */
+.et-sol{
+  padding:8px 8px 8px 10px;
+  border-right:1px solid #ccc;
+}
+.et-urun-tr{
+  font-size:14px;
+  font-weight:900;
+  text-transform:uppercase;
+  color:#000;
+  line-height:1.1;
+  margin-bottom:1px;
+}
+.et-urun-en{
+  font-size:9px;
+  font-weight:700;
+  color:#444;
+  margin-bottom:6px;
+  font-style:italic;
+}
+.et-row{margin-bottom:2.5px;font-size:7.5px;}
+.et-row b{font-size:7px;text-transform:uppercase;font-weight:800;color:#000;}
+.et-row span{color:#222;}
+.et-divider{height:0.5px;background:#ccc;margin:4px 0;}
+
+/* SAĞ — logo + sertifikalar */
+.et-sag-ust{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  padding:8px 6px;
+  gap:6px;
+}
+.et-logo-alan{
+  width:100%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.et-logo-alan img{
+  max-width:90px;
+  max-height:50px;
+  object-fit:contain;
+}
+.et-logo-text-fallback{
+  font-size:13px;
+  font-weight:900;
+  color:#1a6b2f;
+  text-align:center;
+  letter-spacing:1px;
+  line-height:1.1;
+}
+.et-sertifika-grup{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:4px;
+  flex-wrap:wrap;
+}
+.et-sert-img{
+  height:24px;
+  width:auto;
+  object-fit:contain;
+}
+/* Sertifika görseli yoksa metin kutu göster */
+.et-sert-kutu{
+  width:24px;height:24px;
+  border:1.5px solid #1a6b2f;
+  border-radius:2px;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  font-size:4.5px;font-weight:900;
+  color:#1a6b2f;text-align:center;
+  line-height:1.1;
+}
+.et-geri-don-kutu{
+  width:24px;height:24px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:16px;
+}
+
+/* ALT BÖLÜM — 3 kolon: ikonlar | barkod | firma */
+.et-alt{
+  display:grid;
+  grid-template-columns:80px 1fr 130px;
+  border-top:1.5px solid #333;
+  min-height:55px;
+}
+.et-alt-ikonlar{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:3px;
+  padding:6px 4px;
+  border-right:0.5px solid #ccc;
+}
+.et-alt-ikon-img{height:20px;width:auto;object-fit:contain;}
+.et-alt-ikon-kutu{
+  width:20px;height:20px;
+  border:1px solid #1a6b2f;border-radius:2px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  font-size:4px;font-weight:900;color:#1a6b2f;text-align:center;line-height:1.1;
+}
+.et-alt-geri-don{font-size:14px;}
+.et-barkod-alan{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  padding:4px 6px;
+  border-right:0.5px solid #ccc;
+}
+#etBarkodSvg{max-width:160px;height:40px;}
+.et-barkod-no{font-size:6.5px;font-family:monospace;color:#333;margin-top:1px;letter-spacing:1px;text-align:center;}
+.et-firma-alan{
+  padding:5px 8px;
+  font-size:6.5px;
+  color:#333;
+  line-height:1.6;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+}
+.et-firma-alan .firma-adi{font-size:7.5px;font-weight:800;color:#000;margin-bottom:2px;}
+.et-firma-alan .tett-satir{
+  margin-top:3px;
+  font-size:7px;
+  font-weight:800;
+  color:#000;
+}
+.et-firma-alan .lot-satir{
+  font-size:6.5px;
+  font-weight:700;
+  color:#1a6b2f;
+  font-family:monospace;
+  letter-spacing:0.5px;
+}
+
+@media print{
+  body>*{display:none!important;}
+  #printArea{display:block!important;position:fixed;top:0;left:0;width:100%;padding:10mm;}
+}
+#printArea{display:none;}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <div class="logo-nav">PEAKSFOOD</div>
+  <div class="hdr-right">
+    <div class="user-chip"><div class="dot"></div><span id="userName">Personel</span></div>
+    <button class="geri-btn" onclick="window.location.href='personel-gorevler.html'">← Görevler</button>
+  </div>
+</div>
+
+<div class="asama-bar">
+  <div class="as tamam"><div class="as-num">✓</div><span>Paket</span></div>
+  <div class="as-cizgi tamam"></div>
+  <div class="as aktif"><div class="as-num">2</div><span>Etiket</span></div>
+  <div class="as-cizgi bekliyor"></div>
+  <div class="as bekliyor"><div class="as-num">3</div><span>Ham Madde</span></div>
+  <div class="as-cizgi bekliyor"></div>
+  <div class="as bekliyor"><div class="as-num">4</div><span>Üretim Bitti</span></div>
+</div>
+
+<div class="wrap">
+
+  <!-- ÜRETİM BİLGİLERİ -->
+  <div class="kart info">
+    <div class="kart-baslik">Üretim Bilgileri</div>
+    <div class="bilgi-grid">
+      <div class="bilgi-alan"><span class="k">Ürün Adı</span><span class="v" id="urunAd">Yükleniyor...</span></div>
+      <div class="bilgi-alan"><span class="k">SKU</span><span class="v accent" id="urunSku">—</span></div>
+      <div class="bilgi-alan"><span class="k">Planlanan Adet</span><span class="v info" id="planlananAdet">—</span></div>
+      <div class="bilgi-alan"><span class="k">Lot No</span><span class="v" id="lotNo">—</span></div>
+      <div class="bilgi-alan"><span class="k">TETT</span><span class="v warning" id="tettTarih">—</span></div>
+      <div class="bilgi-alan"><span class="k">Vardiya</span><span class="v" id="vardiyaInfo">—</span></div>
+    </div>
+  </div>
+
+  <!-- ADET -->
+  <div class="kart green">
+    <div class="kart-baslik">Etiket Adedi</div>
+    <div class="alan">
+      <label>Kaç Adet Etiket Çıkarılacak?</label>
+      <div class="inp-wrap">
+        <input type="number" id="adetInp" placeholder="Adet..." min="1" oninput="etiketGuncelle()"/>
+        <span class="inp-birim">adet</span>
+      </div>
+      <div class="inp-not">Boş bırakırsanız planlanan adet kullanılır</div>
+    </div>
+  </div>
+
+  <!-- ETİKET ÖNİZLEME -->
+  <div class="onizleme-baslik">🏷️ Etiket Önizleme</div>
+  <div class="etiket-wrapper">
+    <div class="etiket" id="etiketEl">
+
+      <!-- ÜST BÖLÜM -->
+      <div class="et-ust">
+
+        <!-- SOL: Ürün adı + içerikler -->
+        <div class="et-sol">
+          <div class="et-urun-tr" id="etUrunTr">ÜRÜN ADI</div>
+          <div class="et-urun-en" id="etUrunEn"></div>
+
+          <div class="et-row" id="etIcerikRow" style="display:none">
+            <b>İçindekiler / Ingredients:</b><br>
+            <span id="etIcerik"></span>
+            <span id="etIcerikEn" style="color:#555;font-style:italic;"></span>
+          </div>
+
+          <div class="et-divider" id="etDiv1"></div>
+
+          <div class="et-row" id="etAlerjenRow" style="display:none">
+            <b>Alerjen Uyarısı / Allergen Warning:</b>
+            <span id="etAlerjen"></span>
+          </div>
+
+          <div class="et-divider" id="etDiv2"></div>
+
+          <div style="display:flex;gap:16px;flex-wrap:wrap;">
+            <div class="et-row" id="etNetAgRow" style="display:none">
+              <b>Net Ağırlık:</b> <span id="etNetAg"></span>
+            </div>
+            <div class="et-row" id="etMenseiRow" style="display:none">
+              <b>Menşei / Origin:</b> <span id="etMensei"></span>
+            </div>
+          </div>
+
+          <div class="et-row" id="etTuketimRow" style="display:none">
+            <b>Tüketim Şekli / Usage:</b>
+            <span id="etTuketim"></span>
+            <span id="etTuketimEn" style="color:#555;font-style:italic;"></span>
+          </div>
+
+          <div class="et-row" id="etNotRow" style="display:none">
+            <span id="etNot" style="color:#555;font-size:7px;font-style:italic;"></span>
+          </div>
+        </div>
+
+        <!-- SAĞ: Logo + Sertifikalar -->
+        <div class="et-sag-ust">
+          <!-- LOGO — admin'den yüklenen görsel veya metin -->
+          <div class="et-logo-alan" id="etLogoAlan">
+            <div class="et-logo-text-fallback" id="etLogoFallback">PEAKSFOOD</div>
+          </div>
+          <!-- SERTİFİKALAR — admin'den yüklenen görseller -->
+          <div class="et-sertifika-grup" id="etSertGrup"></div>
+        </div>
+
+      </div><!-- /et-ust -->
+
+      <!-- ALT BÖLÜM: İkonlar | Barkod | Firma -->
+      <div class="et-alt">
+
+        <!-- Sertifika ikonları (alttan da göster — fotoğraftaki gibi) -->
+        <div class="et-alt-ikonlar" id="etAltIkonlar"></div>
+
+        <!-- BARKOD -->
+        <div class="et-barkod-alan">
+          <svg id="etBarkodSvg"></svg>
+          <div class="et-barkod-no" id="etBarkodNo">—</div>
+        </div>
+
+        <!-- FİRMA + TETT + LOT -->
+        <div class="et-firma-alan">
+          <div class="firma-adi" id="etFirmaAdi">PeaksFood Gıda San.</div>
+          <div id="etKayitNo" style="font-size:6px;color:#555;"></div>
+          <div id="etTelefon" style="font-size:6px;color:#555;"></div>
+          <div id="etWebsite" style="font-size:6px;color:#555;"></div>
+          <div class="tett-satir">TETT: <span id="etTett">—</span></div>
+          <div class="lot-satir" id="etLot">—</div>
+        </div>
+
+      </div><!-- /et-alt -->
+
+    </div><!-- /etiket -->
+  </div><!-- /wrapper -->
+
+  <!-- YAZDIR -->
+  <button class="btn-yazdir" onclick="yazdir()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px">
+      <polyline points="6 9 6 2 18 2 18 9"/>
+      <path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/>
+      <rect x="6" y="14" width="12" height="8"/>
+    </svg>
+    Etiketi Yazdır
+  </button>
+  <div class="yazdir-not">Ctrl+P veya yukarıdaki buton ile yazdırın</div>
+
+  <button class="btn-basla" id="btnBaslat" onclick="uretimBaslat()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="width:20px;height:20px"><polyline points="20 6 9 17 4 12"/></svg>
+    Ham Madde Toplamaya Başla →
+  </button>
+
+</div><!-- /wrap -->
+
+<!-- PRINT AREA -->
+<div id="printArea"></div>
+
+<script>
+const SB='https://ubnsszlwyhlmpoukfihw.supabase.co';
+const KEY='sb_publishable_rbA-g8mway8Bp9pJtk6Jqw_0fFt3bp2';
+const H={'apikey':KEY,'Authorization':'Bearer '+KEY,'Content-Type':'application/json'};
+
+const userStr=localStorage.getItem('user');
+if(!userStr){window.location.href='personel-giris.html';}
+const usr=JSON.parse(userStr);
+const uid=localStorage.getItem('aktif_uretim_id');
+if(!uid){window.location.href='personel-gorevler.html';}
+
+document.getElementById('userName').textContent=usr.ad;
+
+let D={
+  ad:'',ad_en:'',sku:'',barkod:'',adet:0,lot_no:'',tett:'',
+  vardiya:'sabah',marka_adi:'PEAKSFOOD',logo_url:'',
+  iso9001:false,iso9001_url:'',
+  iso22000:false,iso22000_url:'',
+  geri_donusum:false,geri_donusum_url:'',
+  icerik:'',icerik_en:'',alerjen:'',alerjen_en:'',
+  mensei:'',net_agirlik:'',tuketim_sekli:'',tuketim_sekli_en:'',
+  etiket_notu:'',firma_adi:'',isletme_kayit_no:'',telefon:'',web_sitesi:''
+};
+
+async function init(){
+  try{
+    // Üretim verisi
+    const r=await fetch(`${SB}/rest/v1/uretim?id=eq.${uid}&select=*`,{headers:H});
+    const d=await r.json();
+    if(!d||!d[0])throw new Error('Üretim bulunamadı');
+    const u=d[0];
+    D.adet=u.planlanan_adet||0;
+    D.ad=u.urun_adi||'';
+    D.lot_no=u.lot_no||'—';
+    D.vardiya=u.vardiya||'sabah';
+    D.tett=u.tett?new Date(u.tett).toLocaleDateString('tr-TR'):'—';
+
+    if(u.urun_id){
+      // Ürün + marka verisi
+      const r2=await fetch(
+        `${SB}/rest/v1/urun?id=eq.${u.urun_id}&select=*,marka(ad,logo_url,iso9001,iso22000,geri_donusum)`,
+        {headers:H}
+      );
+      const d2=await r2.json();
+      if(d2&&d2[0]){
+        const ur=d2[0];
+        D.ad=ur.ad||D.ad;
+        D.ad_en=ur.ad_en||'';
+        D.sku=ur.sku||'';
+        D.barkod=ur.barkod||ur.sku||'';
+        D.icerik=ur.icerik||'';
+        D.icerik_en=ur.icerik_en||'';
+        D.alerjen=ur.alerjen||'';
+        D.alerjen_en=ur.alerjen_en||'';
+        D.mensei=ur.mensei||'';
+        D.net_agirlik=ur.net_agirlik||'';
+        D.tuketim_sekli=ur.tuketim_sekli||'';
+        D.tuketim_sekli_en=ur.tuketim_sekli_en||'';
+        D.etiket_notu=ur.etiket_notu||'';
+        D.firma_adi=ur.firma_adi||'PeaksFood Gıda San.';
+        D.isletme_kayit_no=ur.isletme_kayit_no||'';
+        D.telefon=ur.telefon||'';
+        D.web_sitesi=ur.web_sitesi||'';
+
+        // Marka (logo + sertifikalar)
+        if(ur.marka){
+          D.marka_adi=ur.marka.ad||'PEAKSFOOD';
+          D.logo_url=ur.marka.logo_url||'';
+          D.iso9001=ur.marka.iso9001||false;
+          D.iso22000=ur.marka.iso22000||false;
+          D.geri_donusum=ur.marka.geri_donusum||false;
+        }
+
+        // Etiket şablonundan logo/sertifika URL'leri
+        try{
+          const r3=await fetch(
+            `${SB}/rest/v1/etiket_sablon?urun_id=eq.${u.urun_id}&select=*`,
+            {headers:H}
+          );
+          const d3=await r3.json();
+          if(d3&&d3[0]){
+            if(d3[0].logo_url) D.logo_url=d3[0].logo_url;
+            if(d3[0].iso9001_url) D.iso9001_url=d3[0].iso9001_url;
+            if(d3[0].iso22000_url) D.iso22000_url=d3[0].iso22000_url;
+            if(d3[0].geri_donusum_url) D.geri_donusum_url=d3[0].geri_donusum_url;
+          }
+        }catch(e){}
+      }
+    }
+  }catch(e){console.warn('init:',e);}
+
+  // Bilgi kartını doldur
+  document.getElementById('urunAd').textContent=D.ad||'—';
+  document.getElementById('urunSku').textContent=D.sku||'—';
+  document.getElementById('planlananAdet').textContent=D.adet+' adet';
+  document.getElementById('lotNo').textContent=D.lot_no;
+  document.getElementById('tettTarih').textContent=D.tett;
+  document.getElementById('vardiyaInfo').textContent=D.vardiya==='sabah'?'☀️ Sabah':'🌙 Akşam';
+  document.getElementById('adetInp').value=D.adet;
+
+  etiketGuncelle();
+}
+
+function etiketGuncelle(){
+  const adet=parseInt(document.getElementById('adetInp').value)||D.adet;
+
+  // Ürün adı
+  document.getElementById('etUrunTr').textContent=D.ad.toUpperCase()||'ÜRÜN ADI';
+  const enEl=document.getElementById('etUrunEn');
+  enEl.textContent=D.ad_en||'';
+  enEl.style.display=D.ad_en?'block':'none';
+
+  // İçindekiler
+  setRow('etIcerikRow','etIcerik',D.icerik);
+  const enIcEl=document.getElementById('etIcerikEn');
+  if(D.icerik_en){enIcEl.textContent=' / '+D.icerik_en;enIcEl.style.display='inline';}
+  else enIcEl.style.display='none';
+
+  // Alerjen
+  setRow('etAlerjenRow','etAlerjen',D.alerjen+(D.alerjen_en?' / '+D.alerjen_en:''));
+
+  // Net ağırlık + menşei
+  setRow('etNetAgRow','etNetAg',D.net_agirlik);
+  setRow('etMenseiRow','etMensei',D.mensei);
+
+  // Tüketim
+  setRow('etTuketimRow','etTuketim',D.tuketim_sekli);
+  const enTukEl=document.getElementById('etTuketimEn');
+  if(D.tuketim_sekli_en){enTukEl.textContent=' / '+D.tuketim_sekli_en;enTukEl.style.display='inline';}
+  else enTukEl.style.display='none';
+
+  // Etiket notu
+  setRow('etNotRow','etNot',D.etiket_notu);
+
+  // Firma bilgileri
+  document.getElementById('etFirmaAdi').textContent=D.firma_adi||'PeaksFood Gıda San.';
+  document.getElementById('etKayitNo').textContent=D.isletme_kayit_no?'Kayıt No: '+D.isletme_kayit_no:'';
+  document.getElementById('etTelefon').textContent=D.telefon||'';
+  document.getElementById('etWebsite').textContent=D.web_sitesi||'';
+
+  // TETT + Lot
+  document.getElementById('etTett').textContent=D.tett;
+  document.getElementById('etLot').textContent='Lot: '+D.lot_no+' | Adet: '+adet;
+
+  // LOGO — sağ üst köşe
+  renderLogo();
+
+  // SERTİFİKALAR — sağ üst (yanında logo) + alt sol
+  renderSertifikalar();
+
+  // BARKOD
+  renderBarkod();
+}
+
+function setRow(rowId, valId, val){
+  const row=document.getElementById(rowId);
+  const el=document.getElementById(valId);
+  if(val&&val.trim()){
+    el.textContent=val;
+    row.style.display='block';
+  }else{
+    row.style.display='none';
+  }
+}
+
+function renderLogo(){
+  const alan=document.getElementById('etLogoAlan');
+  const fallback=document.getElementById('etLogoFallback');
+  if(D.logo_url){
+    // Yüklenen logo görseli
+    alan.innerHTML=`<img src="${D.logo_url}" alt="${D.marka_adi}" style="max-width:90px;max-height:48px;object-fit:contain;" onerror="this.style.display='none';document.getElementById('etLogoFallback2').style.display='block'">
+    <div id="etLogoFallback2" style="display:none;font-size:13px;font-weight:900;color:#1a6b2f;text-align:center;">${D.marka_adi}</div>`;
+  }else{
+    // Logo yüklenmemişse büyük metin
+    alan.innerHTML=`<div style="font-size:13px;font-weight:900;color:#1a6b2f;text-align:center;letter-spacing:1px;line-height:1.2;">${D.marka_adi}</div>`;
+  }
+}
+
+function renderSertifikalar(){
+  // Sağ üst — logo yanındaki sertifikalar
+  const ust=document.getElementById('etSertGrup');
+  // Alt sol — barkodun yanındaki ikonlar
+  const alt=document.getElementById('etAltIkonlar');
+  ust.innerHTML='';
+  alt.innerHTML='';
+
+  const sertler=[
+    {aktif:D.iso9001,url:D.iso9001_url,etiket:'ISO\n9001',tip:'iso9001'},
+    {aktif:D.iso22000,url:D.iso22000_url,etiket:'ISO\n22000',tip:'iso22000'},
+    {aktif:D.geri_donusum,url:D.geri_donusum_url,etiket:'♻',tip:'geri'}
+  ];
+
+  sertler.forEach(s=>{
+    if(!s.aktif)return;
+    // Sağ üst ikonu
+    let ustEl='';
+    if(s.url){
+      ustEl=`<img src="${s.url}" class="et-sert-img" style="height:24px;width:auto;object-fit:contain;" alt="${s.etiket}">`;
+    }else{
+      if(s.tip==='geri'){
+        ustEl=`<div class="et-geri-don-kutu" style="font-size:18px;">♻</div>`;
+      }else{
+        ustEl=`<div class="et-sert-kutu"><span style="white-space:pre;">${s.etiket}</span></div>`;
+      }
+    }
+    ust.insertAdjacentHTML('beforeend',ustEl);
+
+    // Alt sol ikonu (biraz küçük)
+    let altEl='';
+    if(s.url){
+      altEl=`<img src="${s.url}" class="et-alt-ikon-img" alt="${s.etiket}">`;
+    }else{
+      if(s.tip==='geri'){
+        altEl=`<div class="et-alt-geri-don">♻</div>`;
+      }else{
+        altEl=`<div class="et-alt-ikon-kutu"><span style="white-space:pre;font-size:4px;">${s.etiket}</span></div>`;
+      }
+    }
+    alt.insertAdjacentHTML('beforeend',altEl);
+  });
+}
+
+function renderBarkod(){
+  const kod=D.barkod||D.sku||D.lot_no||'0000000000000';
+  document.getElementById('etBarkodNo').textContent=kod;
+  try{
+    JsBarcode('#etBarkodSvg', kod, {
+      format:'CODE128',
+      width:1.2,
+      height:38,
+      displayValue:false,
+      margin:2,
+      background:'#ffffff',
+      lineColor:'#000000'
+    });
+  }catch(e){
+    // Barkod oluşturulamazsa alternatif dene
+    try{
+      JsBarcode('#etBarkodSvg','0000000000000',{
+        format:'CODE128',width:1.2,height:38,displayValue:false,margin:2
+      });
+    }catch(e2){}
+  }
+}
+
+function yazdir(){
+  const etiketHtml=document.getElementById('etiketEl').outerHTML;
+  const w=window.open('','_blank','width=700,height:600');
+  w.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8">
+  <title>Etiket - ${D.ad}</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jsbarcode/3.11.5/JsBarcode.all.min.js"><\/script>
+  <style>
+    body{margin:10mm;background:#fff;}
+    .etiket{background:#fff;width:100%;max-width:540px;margin:0 auto;font-family:Arial,Helvetica,sans-serif;color:#000;border:1px solid #999;font-size:7.5px;line-height:1.5;}
+    .et-ust{display:grid;grid-template-columns:1fr 110px;border-bottom:1.5px solid #333;min-height:140px;}
+    .et-sol{padding:8px 8px 8px 10px;border-right:1px solid #ccc;}
+    .et-urun-tr{font-size:14px;font-weight:900;text-transform:uppercase;color:#000;line-height:1.1;margin-bottom:1px;}
+    .et-urun-en{font-size:9px;font-weight:700;color:#444;margin-bottom:6px;font-style:italic;}
+    .et-row{margin-bottom:2.5px;font-size:7.5px;}
+    .et-row b{font-size:7px;text-transform:uppercase;font-weight:800;color:#000;}
+    .et-divider{height:0.5px;background:#ccc;margin:4px 0;}
+    .et-sag-ust{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:8px 6px;gap:6px;}
+    .et-logo-alan{width:100%;display:flex;align-items:center;justify-content:center;}
+    .et-logo-alan img{max-width:90px;max-height:50px;object-fit:contain;}
+    .et-sertifika-grup{display:flex;align-items:center;justify-content:center;gap:4px;flex-wrap:wrap;}
+    .et-sert-img{height:24px;width:auto;object-fit:contain;}
+    .et-sert-kutu{width:24px;height:24px;border:1.5px solid #1a6b2f;border-radius:2px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:4.5px;font-weight:900;color:#1a6b2f;text-align:center;line-height:1.1;}
+    .et-alt{display:grid;grid-template-columns:80px 1fr 130px;border-top:1.5px solid #333;min-height:55px;}
+    .et-alt-ikonlar{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding:6px 4px;border-right:0.5px solid #ccc;}
+    .et-alt-ikon-img{height:20px;width:auto;object-fit:contain;}
+    .et-alt-ikon-kutu{width:20px;height:20px;border:1px solid #1a6b2f;border-radius:2px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:4px;font-weight:900;color:#1a6b2f;text-align:center;line-height:1.1;}
+    .et-alt-geri-don{font-size:14px;}
+    .et-barkod-alan{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:4px 6px;border-right:0.5px solid #ccc;}
+    #etBarkodSvg{max-width:160px;height:40px;}
+    .et-barkod-no{font-size:6.5px;font-family:monospace;color:#333;margin-top:1px;letter-spacing:1px;text-align:center;}
+    .et-firma-alan{padding:5px 8px;font-size:6.5px;color:#333;line-height:1.6;display:flex;flex-direction:column;justify-content:center;}
+    .et-firma-alan .firma-adi{font-size:7.5px;font-weight:800;color:#000;margin-bottom:2px;}
+    .et-firma-alan .tett-satir{margin-top:3px;font-size:7px;font-weight:800;color:#000;}
+    .et-firma-alan .lot-satir{font-size:6.5px;font-weight:700;color:#1a6b2f;font-family:monospace;letter-spacing:0.5px;}
+    .et-geri-don-kutu{width:24px;height:24px;display:flex;align-items:center;justify-content:center;font-size:16px;}
+    @media print{button{display:none!important;}}
+  </style></head><body>
+  ${etiketHtml}
+  <br><button onclick="window.print();window.close()" style="padding:10px 20px;background:#1a6b2f;color:#fff;border:none;border-radius:6px;font-size:14px;cursor:pointer;">🖨️ Yazdır</button>
+  <script>
+    // Barkodu yeniden çiz
+    try{
+      JsBarcode('#etBarkodSvg','${D.barkod||D.sku||'0000000000000'}',{
+        format:'CODE128',width:1.2,height:38,displayValue:false,margin:2,
+        background:'#ffffff',lineColor:'#000000'
+      });
+    }catch(e){}
+  <\/script>
+  </body></html>`);
+  w.document.close();
+}
+
+async function uretimBaslat(){
+  const btn=document.getElementById('btnBaslat');
+  btn.disabled=true;
+  btn.innerHTML='Kaydediliyor...';
+  try{
+    await fetch(`${SB}/rest/v1/uretim?id=eq.${uid}`,{
+      method:'PATCH',
+      headers:{...H,'Prefer':'return=minimal'},
+      body:JSON.stringify({etiket_tamam:true,durum:'devam',baslama_tarihi:new Date().toISOString()})
+    });
+  }catch(e){console.warn(e);}
+  window.location.href='mobil-hammadde-toplama.html';
+}
+
+init();
+</script>
+</body>
+</html>
