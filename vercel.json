@@ -1,5 +1,15 @@
 {
   "cleanUrls": true,
+  "trailingSlash": false,
+  "rewrites": [
+    { "source": "/personel-giris", "destination": "/personel-giris.html" },
+    { "source": "/personel-gorevler", "destination": "/personel-gorevler.html" },
+    { "source": "/mobil-hammadde-toplama", "destination": "/mobil-hammadde-toplama.html" },
+    { "source": "/mobil-paket-toplama", "destination": "/mobil-paket-toplama.html" },
+    { "source": "/mobil-uretim-bitti", "destination": "/mobil-uretim-bitti.html" },
+    { "source": "/web-etiket", "destination": "/web-etiket.html" },
+    { "source": "/admin-panel", "destination": "/admin-panel.html" }
+  ],
   "functions": {
     "api/sentos.js": {
       "memory": 256,
