@@ -1,0 +1,9 @@
+{
+  "cleanUrls": true,
+  "functions": {
+    "api/sentos.js": {
+      "memory": 256,
+      "maxDuration": 30
+    }
+  }
+}
