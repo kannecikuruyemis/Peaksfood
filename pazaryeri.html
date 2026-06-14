@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Pazaryeri Fiyat — PeaksFood</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+--bg:#0a0e0b;--panel:#101712;--panel2:#16201a;--panel3:#1c2820;--bord:rgba(255,255,255,0.07);--bord2:rgba(255,255,255,0.04);
+--green:#2ee06a;--green2:#22c55e;--gdim:rgba(46,224,106,0.08);--gmid:rgba(46,224,106,0.16);--gglow:rgba(46,224,106,0.25);
+--amber:#f5a623;--adim:rgba(245,166,35,0.09);--amid:rgba(245,166,35,0.18);
+--red:#f15a5a;--rdim:rgba(241,90,90,0.09);--rmid:rgba(241,90,90,0.18);
+--blue:#4a9eff;--bdim:rgba(74,158,255,0.1);
+--purple:#b06cf0;--pdim:rgba(176,108,240,0.1);
+--text:#e6f2e9;--dim:#93a89b;--dim2:#5d6f63;
+--font:'Plus Jakarta Sans',sans-serif;--mono:'JetBrains Mono',monospace;
+--r:12px;--r-sm:9px;--r-lg:16px;
+--shadow:0 4px 24px rgba(0,0,0,0.35);--shadow-sm:0 2px 10px rgba(0,0,0,0.25);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:14px;line-height:1.55;-webkit-font-smoothing:antialiased}
+.hidden{display:none!important}
+/* HEADER */
+.top{height:62px;background:linear-gradient(180deg,var(--panel) 0%,rgba(16,23,18,0.96) 100%);border-bottom:1px solid var(--bord);display:flex;align-items:center;padding:0 24px;gap:16px;position:sticky;top:0;z-index:50;backdrop-filter:blur(8px)}
+.top .logo{font-weight:800;font-size:17px;color:var(--green);display:flex;align-items:center;gap:8px;letter-spacing:-0.02em}
+.top .back{margin-left:auto;color:var(--dim);text-decoration:none;padding:9px 16px;border:1px solid var(--bord);border-radius:var(--r-sm);font-size:13px;font-weight:500;transition:.18s;display:flex;align-items:center;gap:6px}
+.top .back:hover{background:var(--panel2);color:var(--text);border-color:var(--gmid)}
+.top .user{color:var(--dim);font-size:13px;display:flex;align-items:center;gap:8px}
+.top .user b{color:var(--text);font-weight:600}
+/* LOGIN */
+.lw{position:fixed;inset:0;background:radial-gradient(ellipse at top,#0f1712 0%,var(--bg) 70%);display:flex;align-items:center;justify-content:center;z-index:100}
+.lw .card{background:var(--panel);border:1px solid var(--bord);border-radius:var(--r-lg);padding:40px;width:360px;box-shadow:var(--shadow)}
+.lw h1{font-size:22px;margin-bottom:6px;color:var(--green);font-weight:800;letter-spacing:-0.02em}
+.lw p{color:var(--dim);font-size:13px;margin-bottom:26px}
+.lw input{width:100%;padding:13px 15px;background:var(--panel2);border:1px solid var(--bord);border-radius:var(--r-sm);color:var(--text);font-family:var(--font);font-size:14px;margin-bottom:12px;transition:.15s}
+.lw input:focus{outline:none;border-color:var(--gmid);box-shadow:0 0 0 3px var(--gdim)}
+.lw button{width:100%;padding:13px;background:linear-gradient(135deg,var(--green) 0%,var(--green2) 100%);color:#04210f;border:none;border-radius:var(--r-sm);font-weight:700;font-size:14px;cursor:pointer;font-family:var(--font);transition:.18s;margin-top:4px}
+.lw button:hover{filter:brightness(1.08);box-shadow:0 4px 18px var(--gglow)}
+.lw .err{color:var(--red);font-size:12px;margin-bottom:12px;min-height:16px}
+/* LAYOUT */
+.wrap{max-width:1400px;margin:0 auto;padding:32px 24px}
+.head{display:flex;align-items:center;gap:14px;margin-bottom:26px;flex-wrap:wrap}
+.head h2{font-size:26px;font-weight:800;letter-spacing:-0.03em}
+.head .sub{color:var(--dim);font-size:13px}
+.head .sp{flex:1}
+/* CARDS / STATS */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:16px;margin-bottom:28px}
+.stat{background:var(--panel);border:1px solid var(--bord);border-radius:var(--r);padding:20px 22px;transition:.2s;position:relative;overflow:hidden}
+.stat::before{content:'';position:absolute;top:0;left:0;width:3px;height:100%;background:var(--dim2);opacity:.4}
+.stat.green::before{background:var(--green)}
+.stat.red::before{background:var(--red)}
+.stat.amber::before{background:var(--amber)}
+.stat.blue::before{background:var(--blue)}
+.stat:hover{border-color:var(--bord);transform:translateY(-1px);box-shadow:var(--shadow-sm)}
+.stat .lbl{color:var(--dim);font-size:11px;font-weight:600;margin-bottom:10px;text-transform:uppercase;letter-spacing:.6px}
+.stat .val{font-size:25px;font-weight:700;font-family:var(--mono);letter-spacing:-0.02em}
+.stat.green .val{color:var(--green)}
+.stat.red .val{color:var(--red)}
+.stat.amber .val{color:var(--amber)}
+.stat.blue .val{color:var(--blue)}
+/* TOOLBAR */
+.tbar{display:flex;gap:10px;margin-bottom:18px;flex-wrap:wrap;align-items:center}
+.tbar input,.tbar select{padding:11px 14px;background:var(--panel2);border:1px solid var(--bord);border-radius:var(--r-sm);color:var(--text);font-family:var(--font);font-size:13px;transition:.15s}
+.tbar input::placeholder{color:var(--dim2)}
+.tbar input:focus,.tbar select:focus{outline:none;border-color:var(--gmid);box-shadow:0 0 0 3px var(--gdim)}
+.tbar .search{flex:1;min-width:200px}
+.btn{padding:11px 18px;border-radius:var(--r-sm);border:none;font-weight:600;font-size:13px;cursor:pointer;font-family:var(--font);display:inline-flex;align-items:center;gap:6px;transition:.18s}
+.btn-g{background:linear-gradient(135deg,var(--green) 0%,var(--green2) 100%);color:#04210f;box-shadow:0 2px 12px var(--gdim)}
+.btn-g:hover{filter:brightness(1.08);box-shadow:0 4px 18px var(--gglow);transform:translateY(-1px)}
+.btn-o{background:var(--panel2);border:1px solid var(--bord);color:var(--text)}
+.btn-o:hover{background:var(--panel3);border-color:var(--gmid)}
+.btn-r{background:var(--rdim);color:var(--red);border:1px solid var(--rmid)}
+.btn-sm{padding:7px 12px;font-size:12px}
+/* TABLE */
+.tablewrap{background:var(--panel);border:1px solid var(--bord);border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow-sm)}
+table{width:100%;border-collapse:collapse}
+th{text-align:left;padding:14px 18px;font-size:11px;font-weight:700;color:var(--dim);text-transform:uppercase;letter-spacing:.6px;border-bottom:1px solid var(--bord);background:var(--panel2);white-space:nowrap}
+td{padding:15px 18px;border-bottom:1px solid var(--bord2);font-size:13.5px}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:var(--gdim)}
+.tag{display:inline-block;padding:4px 11px;border-radius:7px;font-size:11px;font-weight:600;letter-spacing:.2px}
+.tag.musteri{background:var(--bdim);color:var(--blue)}
+.tag.tedarikci{background:var(--adim);color:var(--amber)}
+.tag.her_ikisi{background:var(--pdim);color:var(--purple)}
+.bakiye-p{color:var(--green);font-weight:700;font-family:var(--mono)}
+.bakiye-n{color:var(--red);font-weight:700;font-family:var(--mono)}
+.bakiye-z{color:var(--dim);font-family:var(--mono)}
+.row-act{display:flex;gap:7px}
+.empty{text-align:center;padding:64px 20px;color:var(--dim2)}
+.empty .ic{font-size:48px;margin-bottom:14px;opacity:.35}
+.empty .et{font-size:15px;font-weight:600;color:var(--dim);margin-bottom:6px}
+.empty .es{font-size:13px;color:var(--dim2)}
+/* MODAL */
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.65);display:flex;align-items:flex-start;justify-content:center;z-index:90;padding:30px 20px;overflow-y:auto;backdrop-filter:blur(4px)}
+.modal .box{background:var(--panel);border:1px solid var(--bord);border-radius:var(--r-lg);width:100%;max-width:680px;margin:auto;box-shadow:var(--shadow)}
+.modal .mh{padding:20px 24px;border-bottom:1px solid var(--bord);display:flex;align-items:center;gap:10px}
+.modal .mh h3{font-size:18px;font-weight:700;letter-spacing:-0.02em}
+.modal .mh .x{margin-left:auto;background:none;border:none;color:var(--dim);font-size:22px;cursor:pointer;line-height:1}
+.modal .mb{padding:24px}
+.modal .mf{padding:18px 24px;border-top:1px solid var(--bord);display:flex;gap:10px;justify-content:flex-end}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
+.fld{margin-bottom:16px}
+.fld label{display:block;font-size:12px;color:var(--dim);margin-bottom:7px;font-weight:600}
+.fld label .req{color:var(--red)}
+.fld input,.fld select,.fld textarea{width:100%;padding:11px 14px;background:var(--panel2);border:1px solid var(--bord);border-radius:var(--r-sm);color:var(--text);font-family:var(--font);font-size:13.5px;transition:.15s}
+.fld input::placeholder{color:var(--dim2)}
+.fld input:focus,.fld select:focus,.fld textarea:focus{outline:none;border-color:var(--gmid);box-shadow:0 0 0 3px var(--gdim)}
+.fld textarea{resize:vertical;min-height:64px}
+.sec-t{font-size:11px;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:.7px;margin:24px 0 14px;padding-bottom:8px;border-bottom:1px solid var(--bord);display:flex;align-items:center;gap:8px}
+.sec-t:first-child{margin-top:0}
+/* EKSTRE */
+.ekstre-tbl td{font-size:12.5px}
+.toast{position:fixed;bottom:24px;right:24px;background:var(--panel);border:1px solid var(--green);border-radius:var(--r);padding:15px 20px;font-size:13px;font-weight:500;z-index:200;box-shadow:var(--shadow);animation:slidein .25s cubic-bezier(.2,.8,.2,1)}
+.toast.err{border-color:var(--red)}
+@keyframes slidein{from{transform:translateX(20px);opacity:0}to{transform:translateX(0);opacity:1}}
+.loading{text-align:center;padding:48px;color:var(--dim)}
+.spin{display:inline-block;width:22px;height:22px;border:2.5px solid var(--bord);border-top-color:var(--green);border-radius:50%;animation:sp 0.7s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+@media(max-width:680px){.grid2,.grid3{grid-template-columns:1fr}.stats{grid-template-columns:1fr 1fr}.wrap{padding:20px 16px}}
+/* KANAL TABS */
+.kanal-tabs{display:flex;gap:7px;margin-bottom:24px;flex-wrap:wrap;background:var(--panel);padding:6px;border-radius:var(--r);border:1px solid var(--bord)}
+.ktab{padding:10px 18px;background:transparent;border:none;color:var(--dim);font-family:var(--font);font-size:13px;font-weight:600;cursor:pointer;border-radius:var(--r-sm);transition:.18s}
+.ktab:hover{color:var(--text);background:var(--panel2)}
+.ktab.active{color:#04210f;background:linear-gradient(135deg,var(--green) 0%,var(--green2) 100%);box-shadow:0 2px 10px var(--gdim)}
+/* MUTABAKAT */
+.mut-platform{display:inline-block;padding:3px 9px;border-radius:6px;font-size:11px;font-weight:600;background:var(--pdim);color:var(--purple)}
+.dr-bekliyor{background:var(--adim);color:var(--amber);padding:3px 9px;border-radius:6px;font-size:11px;font-weight:600}
+.dr-mutabik{background:var(--gdim);color:var(--green);padding:3px 9px;border-radius:6px;font-size:11px;font-weight:600}
+.dr-farkli{background:var(--rdim);color:var(--red);padding:3px 9px;border-radius:6px;font-size:11px;font-weight:600}
+.dr-odendi{background:var(--bdim);color:var(--blue);padding:3px 9px;border-radius:6px;font-size:11px;font-weight:600}
+.fark-p{color:var(--green);font-weight:600;font-family:var(--mono)}
+.fark-n{color:var(--red);font-weight:600;font-family:var(--mono)}
+</style>
+</head>
+<body>
+<div class="lw" id="lw"><div class="card">
+  <h1>🛒 Pazaryeri Fiyat</h1><p>PeaksFood — devam etmek için giriş yapın</p>
+  <div class="err" id="lerr"></div>
+  <input id="lad" placeholder="Kullanıcı adı"><input id="lsifre" type="password" placeholder="Şifre">
+  <button onclick="login()">Giriş Yap</button>
+</div></div>
+<div id="app" class="hidden">
+  <div class="top"><div class="logo">🛒 PeaksFood</div><a href="admin-panel.html" class="back">← Panele Dön</a><div class="user" id="uad"></div></div>
+  <div class="wrap">
+    <div class="head"><h2>Pazaryeri Fiyatlandırma</h2><div class="sub">Kategori × barem · backend hesaplı · her pazaryeri ayrı</div></div>
+    <div class="kanal-tabs">
+      <button class="ktab active" onclick="setTab('hesapla',this)">🧮 Fiyat Hesapla</button>
+      <button class="ktab" onclick="setTab('pazaryeri',this)">🏪 Pazaryeri Ayarları</button>
+      <button class="ktab" onclick="setTab('kategori',this)">📂 Kategori Kârları</button>
+      <button class="ktab" onclick="setTab('kargo',this)">📦 Kargo Baremleri</button>
+    </div>
+
+    <!-- HESAPLA SEKMESİ -->
+    <div id="tab_hesapla">
+      <div class="tablewrap" style="padding:24px;margin-bottom:24px">
+        <div class="sec-t">Formül: (((maliyet + kargo) × kâr) + sabit) × komisyon</div>
+        <div class="grid3">
+          <div class="fld"><label>Ürün <span class="req">*</span></label><select id="hUrun"></select></div>
+          <div class="fld"><label>Pazaryeri <span class="req">*</span></label><select id="hPazaryeri"></select></div>
+          <div class="fld"><label>Tip</label><select id="hTip"><option value="b2c">B2C</option><option value="b2b">B2B</option></select></div>
+        </div>
+        <div class="fld"><label>Maliyet (boş = reçeteden alınır)</label><input type="number" id="hMaliyet" placeholder="reçeteden otomatik" step="0.01"></div>
+        <button class="btn btn-g" onclick="hesapla()">🧮 Fiyat Hesapla</button>
+        <button class="btn btn-o" onclick="hesaplaTumPazaryeri()" style="margin-left:8px">📊 Tüm Pazaryerlerinde Karşılaştır</button>
+      </div>
+      <div id="hesapSonuc"></div>
+    </div>
+
+    <!-- PAZARYERI AYAR SEKMESİ -->
+    <div id="tab_pazaryeri" style="display:none">
+      <div class="head" style="margin-bottom:16px"><div class="sp"></div><button class="btn btn-g" onclick="openPazaryeri()">+ Pazaryeri Ekle</button></div>
+      <div class="tablewrap"><table>
+        <thead><tr><th>Pazaryeri</th><th>Tip</th><th>Komisyon</th><th>Sabit Gider</th><th>Durum</th><th></th></tr></thead>
+        <tbody id="pazaryeriBody"></tbody>
+      </table></div>
+    </div>
+
+    <!-- KATEGORI SEKMESİ -->
+    <div id="tab_kategori" style="display:none">
+      <div class="head" style="margin-bottom:16px"><div class="sp"></div><button class="btn btn-g" onclick="openKategori()">+ Kategori Kârı Ekle</button></div>
+      <div class="tablewrap"><table>
+        <thead><tr><th>Kategori</th><th>Tip</th><th>Kâr Oranı</th><th></th></tr></thead>
+        <tbody id="kategoriBody"></tbody>
+      </table></div>
+    </div>
+
+    <!-- KARGO SEKMESİ -->
+    <div id="tab_kargo" style="display:none">
+      <div class="head" style="margin-bottom:16px"><div class="sp"></div><button class="btn btn-g" onclick="openKargo()">+ Kargo Baremi Ekle</button></div>
+      <div class="al-info" style="background:var(--bdim);border:1px solid var(--blue);border-radius:var(--r-sm);padding:11px 14px;font-size:12px;color:var(--blue);margin-bottom:16px">ℹ️ Kargo baremi <b>satış fiyatına</b> göre kademeli. Sistem döngüyü otomatik çözer.</div>
+      <div class="tablewrap"><table>
+        <thead><tr><th>Pazaryeri</th><th>Alt Limit</th><th>Üst Limit</th><th>Kargo Ücreti</th><th></th></tr></thead>
+        <tbody id="kargoBody"></tbody>
+      </table></div>
+    </div>
+  </div>
+</div>
+
+<!-- MODALLAR -->
+<div class="modal hidden" id="pazaryeriModal"><div class="box">
+  <div class="mh"><h3 id="pmTit">Pazaryeri Ekle</h3><button class="x" onclick="closeMo('pazaryeriModal')">×</button></div>
+  <div class="mb"><input type="hidden" id="pmId">
+    <div class="grid2">
+      <div class="fld"><label>Pazaryeri <span class="req">*</span></label><input id="pmAd" placeholder="trendyol"></div>
+      <div class="fld"><label>Tip</label><select id="pmTip"><option value="b2c">B2C</option><option value="b2b">B2B</option></select></div>
+    </div>
+    <div class="grid2">
+      <div class="fld"><label>Komisyon Oranı % <span class="req">*</span></label><input type="number" id="pmKomisyon" placeholder="18" step="0.1"></div>
+      <div class="fld"><label>Sabit Gider (₺)</label><input type="number" id="pmSabit" placeholder="15" step="0.01"></div>
+    </div>
+  </div>
+  <div class="mf"><button class="btn btn-o" onclick="closeMo('pazaryeriModal')">İptal</button><button class="btn btn-g" onclick="savePazaryeri()">Kaydet</button></div>
+</div></div>
+
+<div class="modal hidden" id="kategoriModal"><div class="box">
+  <div class="mh"><h3 id="kmTit">Kategori Kârı</h3><button class="x" onclick="closeMo('kategoriModal')">×</button></div>
+  <div class="mb"><input type="hidden" id="kmId">
+    <div class="grid2">
+      <div class="fld"><label>Kategori <span class="req">*</span></label><input id="kmAd" placeholder="kuruyemis"></div>
+      <div class="fld"><label>Tip</label><select id="kmTip"><option value="b2c">B2C</option><option value="b2b">B2B</option></select></div>
+    </div>
+    <div class="fld"><label>Kâr Oranı % <span class="req">*</span></label><input type="number" id="kmKar" placeholder="25" step="0.1"></div>
+  </div>
+  <div class="mf"><button class="btn btn-o" onclick="closeMo('kategoriModal')">İptal</button><button class="btn btn-g" onclick="saveKategori()">Kaydet</button></div>
+</div></div>
+
+<div class="modal hidden" id="kargoModal"><div class="box">
+  <div class="mh"><h3 id="kgTit">Kargo Baremi</h3><button class="x" onclick="closeMo('kargoModal')">×</button></div>
+  <div class="mb"><input type="hidden" id="kgId">
+    <div class="fld"><label>Pazaryeri <span class="req">*</span></label><input id="kgPazaryeri" placeholder="trendyol"></div>
+    <div class="grid3">
+      <div class="fld"><label>Alt Limit (₺)</label><input type="number" id="kgAlt" placeholder="0" step="0.01"></div>
+      <div class="fld"><label>Üst Limit (₺, boş=∞)</label><input type="number" id="kgUst" placeholder="199.99" step="0.01"></div>
+      <div class="fld"><label>Kargo (₺) <span class="req">*</span></label><input type="number" id="kgUcret" placeholder="42" step="0.01"></div>
+    </div>
+  </div>
+  <div class="mf"><button class="btn btn-o" onclick="closeMo('kargoModal')">İptal</button><button class="btn btn-g" onclick="saveKargo()">Kaydet</button></div>
+</div></div>
+<script>
+const SB='https://ubnsszlwyhlmpoukfihw.supabase.co';
+const KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVibnNzemx3eWhsbXBvdWtmaWh3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU3NTU4MzAsImV4cCI6MjA5MTMzMTgzMH0.K1kTRAGBlvxx2VKMfagXaZgrbXYaQAbK5UyJwzal4a0';
+const H={'apikey':KEY,'Authorization':`Bearer ${KEY}`,'Content-Type':'application/json','Prefer':'return=representation'};
+let CU=null;
+async function api(path,opts={}){const r=await fetch(`${SB}/rest/v1/${path}`,{...opts,headers:{...H,...(opts.headers||{})}});if(!r.ok){const t=await r.text();throw new Error(t||r.status);}if(r.status===204)return null;const t=await r.text();return t?JSON.parse(t):null;}
+async function rpc(fn,params){const r=await fetch(`${SB}/rest/v1/rpc/${fn}`,{method:'POST',headers:H,body:JSON.stringify(params)});if(!r.ok){const t=await r.text();throw new Error(t||r.status);}const t=await r.text();return t?JSON.parse(t):null;}
+window.addEventListener('DOMContentLoaded',()=>{try{const s=localStorage.getItem('pf_session');if(s){CU=JSON.parse(s);showApp();}}catch(e){localStorage.removeItem('pf_session');}});
+document.getElementById('lsifre')?.addEventListener('keydown',e=>{if(e.key==='Enter')login();});
+async function login(){const ad=document.getElementById('lad').value.trim();const sifre=document.getElementById('lsifre').value;const err=document.getElementById('lerr');err.textContent='';if(!ad||!sifre){err.textContent='Kullanıcı adı ve şifre gerekli';return;}try{const res=await rpc('kullanici_giris',{p_ad:ad,p_sifre:sifre});if(!res||!res.length){err.textContent='Kullanıcı adı veya şifre hatalı';return;}CU=res[0];localStorage.setItem('pf_session',JSON.stringify({id:CU.id,ad:CU.ad,rol:CU.rol,email:CU.email||null}));showApp();}catch(e){err.textContent='Giriş hatası: '+e.message;}}
+function showApp(){document.getElementById('lw').classList.add('hidden');document.getElementById('app').classList.remove('hidden');document.getElementById('uad').innerHTML=`<b>${CU.ad}</b> · ${CU.rol}`;loadAll();}
+function logout(){CU=null;try{localStorage.removeItem('pf_session');}catch(e){}location.reload();}
+function closeMo(id){document.getElementById(id).classList.add('hidden');}
+function toast(msg,type){const t=document.createElement('div');t.className='toast'+(type==='err'?' err':'');t.textContent=msg;document.body.appendChild(t);setTimeout(()=>t.remove(),3000);}
+function fmt(n){return (parseFloat(n)||0).toLocaleString('tr-TR',{maximumFractionDigits:2});}
+function fmtMoney(n){return (parseFloat(n)||0).toLocaleString('tr-TR',{minimumFractionDigits:2,maximumFractionDigits:2})+' ₺';}
+
+let curTab='hesapla', urunler=[], pazaryeriler=[], kategoriler=[], kargolar=[];
+
+async function loadAll(){
+  try{
+    [urunler,pazaryeriler,kategoriler,kargolar]=await Promise.all([
+      api('urun?select=id,ad,sku,kategori&order=ad.asc').catch(()=>[]),
+      api('pazaryeri_ayar?order=pazaryeri.asc').catch(()=>[]),
+      api('kategori_kar?order=kategori.asc').catch(()=>[]),
+      api('kargo_baremi?order=pazaryeri.asc,alt_limit.asc').catch(()=>[])
+    ]);
+    fillHesapSelects();renderPazaryeri();renderKategori();renderKargo();
+  }catch(e){toast('Yükleme hatası: '+e.message,'err');}
+}
+
+function fillHesapSelects(){
+  document.getElementById('hUrun').innerHTML=urunler.map(u=>`<option value="${u.id}">${u.ad}${u.sku?' ('+u.sku+')':''}</option>`).join('');
+  const pys=[...new Set(pazaryeriler.map(p=>p.pazaryeri))];
+  document.getElementById('hPazaryeri').innerHTML=pys.map(p=>`<option value="${p}">${p}</option>`).join('')||'<option value="">Önce pazaryeri ekleyin</option>';
+}
+
+function setTab(t,el){curTab=t;document.querySelectorAll('.ktab').forEach(x=>x.classList.remove('active'));el.classList.add('active');['hesapla','pazaryeri','kategori','kargo'].forEach(x=>document.getElementById('tab_'+x).style.display=x===t?'block':'none');}
+
+// ---- HESAPLA ----
+async function hesapla(){
+  const urunId=document.getElementById('hUrun').value;
+  const pazaryeri=document.getElementById('hPazaryeri').value;
+  const tip=document.getElementById('hTip').value;
+  const maliyet=document.getElementById('hMaliyet').value?parseFloat(document.getElementById('hMaliyet').value):null;
+  if(!urunId||!pazaryeri){toast('Ürün ve pazaryeri seçin','err');return;}
+  try{
+    const res=await rpc('pazaryeri_fiyat_hesapla',{p_urun_id:urunId,p_pazaryeri:pazaryeri,p_eticaret_tip:tip,p_maliyet:maliyet});
+    if(res&&res.hata){document.getElementById('hesapSonuc').innerHTML=`<div class="empty"><div class="ic">⚠️</div><div class="et">${res.hata}</div></div>`;return;}
+    renderSonuc(res);
+  }catch(e){toast('Hata: '+e.message,'err');}
+}
+
+function renderSonuc(r){
+  const kargoKar=parseFloat(r.kargo_kar_zarar)||0;
+  document.getElementById('hesapSonuc').innerHTML=`
+    <div class="tablewrap" style="padding:28px">
+      <div style="text-align:center;margin-bottom:24px">
+        <div style="font-size:12px;color:var(--dim);text-transform:uppercase;letter-spacing:.6px">Satış Fiyatı (${r.pazaryeri} · ${r.eticaret_tip})</div>
+        <div style="font-size:42px;font-weight:800;color:var(--green);font-family:var(--mono);letter-spacing:-0.02em">${fmtMoney(r.son_fiyat)}</div>
+        <div style="font-size:11px;color:var(--dim2)">${r.tur} turda stabilize edildi</div>
+      </div>
+      <div class="stats" style="margin-bottom:0">
+        <div class="stat"><div class="lbl">Maliyet</div><div class="val" style="font-size:18px">${fmtMoney(r.maliyet)}</div></div>
+        <div class="stat blue"><div class="lbl">Kâr Oranı</div><div class="val" style="font-size:18px">%${((r.kar_orani)*100).toFixed(0)}</div></div>
+        <div class="stat amber"><div class="lbl">Komisyon</div><div class="val" style="font-size:18px">%${((r.komisyon_orani)*100).toFixed(0)}</div></div>
+        <div class="stat"><div class="lbl">Sabit Gider</div><div class="val" style="font-size:18px">${fmtMoney(r.sabit_gider)}</div></div>
+      </div>
+      <div class="sec-t" style="margin-top:24px">Kargo Analizi</div>
+      <div class="stats" style="margin-bottom:0">
+        <div class="stat"><div class="lbl">Barem Kargo (alınan)</div><div class="val" style="font-size:18px">${fmtMoney(r.barem_kargo)}</div></div>
+        <div class="stat"><div class="lbl">Gerçek Kargo (desi)</div><div class="val" style="font-size:18px">${fmtMoney(r.gercek_kargo)}</div></div>
+        <div class="stat ${kargoKar>=0?'green':'red'}"><div class="lbl">Kargo ${kargoKar>=0?'Kârı':'Zararı'}</div><div class="val" style="font-size:18px">${kargoKar>=0?'+':''}${fmtMoney(kargoKar)}</div></div>
+      </div>
+      ${kargoKar<0?`<div style="margin-top:14px;background:var(--rdim);border:1px solid var(--rmid);border-radius:var(--r-sm);padding:12px 14px;font-size:12px;color:var(--red)">⚠️ Bu üründe kargo zararı var! Barem kargo gerçek maliyeti karşılamıyor, fiyat/barem gözden geçirilmeli.</div>`:''}
+    </div>`;
+}
+
+async function hesaplaTumPazaryeri(){
+  const urunId=document.getElementById('hUrun').value;
+  const tip=document.getElementById('hTip').value;
+  if(!urunId){toast('Ürün seçin','err');return;}
+  const pys=[...new Set(pazaryeriler.filter(p=>p.eticaret_tip===tip).map(p=>p.pazaryeri))];
+  if(!pys.length){toast('Bu tipte pazaryeri ayarı yok','err');return;}
+  let rows='';
+  for(const py of pys){
+    try{
+      const r=await rpc('pazaryeri_fiyat_hesapla',{p_urun_id:urunId,p_pazaryeri:py,p_eticaret_tip:tip,p_maliyet:null});
+      if(r&&!r.hata){
+        const kk=parseFloat(r.kargo_kar_zarar)||0;
+        rows+=`<tr><td><strong>${py}</strong></td><td class="mono">${fmtMoney(r.maliyet)}</td><td class="mono">${fmtMoney(r.barem_kargo)}</td><td class="mono">%${(r.komisyon_orani*100).toFixed(0)}</td><td class="mono bakiye-p"><strong>${fmtMoney(r.son_fiyat)}</strong></td><td class="mono ${kk>=0?'fark-p':'fark-n'}">${kk>=0?'+':''}${fmtMoney(kk)}</td></tr>`;
+      }
+    }catch(e){}
+  }
+  document.getElementById('hesapSonuc').innerHTML=`<div class="tablewrap"><table><thead><tr><th>Pazaryeri</th><th>Maliyet</th><th>Kargo</th><th>Komisyon</th><th>Satış Fiyatı</th><th>Kargo K/Z</th></tr></thead><tbody>${rows}</tbody></table></div>`;
+}
+
+// ---- PAZARYERI CRUD ----
+function renderPazaryeri(){
+  const tb=document.getElementById('pazaryeriBody');
+  if(!pazaryeriler.length){tb.innerHTML='<tr><td colspan="6"><div class="empty"><div class="ic">🏪</div><div class="et">Pazaryeri ayarı yok</div><div class="es">+ Pazaryeri Ekle ile başlayın</div></div></td></tr>';return;}
+  tb.innerHTML=pazaryeriler.map(p=>`<tr>
+    <td><strong>${p.pazaryeri}</strong></td><td><span class="tag musteri">${p.eticaret_tip.toUpperCase()}</span></td>
+    <td class="mono">%${(p.komisyon_orani*100).toFixed(1)}</td><td class="mono">${fmtMoney(p.sabit_gider)}</td>
+    <td>${p.aktif?'<span class="dr-mutabik">Aktif</span>':'<span class="dr-farkli">Pasif</span>'}</td>
+    <td class="row-act"><button class="btn btn-o btn-sm" onclick='editPazaryeri(${JSON.stringify(p).replace(/'/g,"&#39;")})'>Düzenle</button></td>
+  </tr>`).join('');
+}
+function openPazaryeri(){document.getElementById('pmTit').textContent='Pazaryeri Ekle';['pmId','pmAd','pmKomisyon','pmSabit'].forEach(i=>document.getElementById(i).value='');document.getElementById('pazaryeriModal').classList.remove('hidden');}
+function editPazaryeri(p){document.getElementById('pmTit').textContent='Pazaryeri Düzenle';document.getElementById('pmId').value=p.id;document.getElementById('pmAd').value=p.pazaryeri;document.getElementById('pmTip').value=p.eticaret_tip;document.getElementById('pmKomisyon').value=(p.komisyon_orani*100).toFixed(1);document.getElementById('pmSabit').value=p.sabit_gider;document.getElementById('pazaryeriModal').classList.remove('hidden');}
+async function savePazaryeri(){
+  const ad=document.getElementById('pmAd').value.trim().toLowerCase();
+  const kom=parseFloat(document.getElementById('pmKomisyon').value);
+  if(!ad||isNaN(kom)){toast('Pazaryeri adı ve komisyon gerekli','err');return;}
+  const body={pazaryeri:ad,eticaret_tip:document.getElementById('pmTip').value,komisyon_orani:kom/100,sabit_gider:parseFloat(document.getElementById('pmSabit').value)||0,aktif:true};
+  const id=document.getElementById('pmId').value;
+  try{
+    if(id)await api(`pazaryeri_ayar?id=eq.${id}`,{method:'PATCH',body:JSON.stringify(body)});
+    else await api('pazaryeri_ayar',{method:'POST',body:JSON.stringify(body)});
+    toast('Kaydedildi ✓');closeMo('pazaryeriModal');loadAll();
+  }catch(e){toast('Hata: '+e.message,'err');}
+}
+
+// ---- KATEGORI CRUD ----
+function renderKategori(){
+  const tb=document.getElementById('kategoriBody');
+  if(!kategoriler.length){tb.innerHTML='<tr><td colspan="4"><div class="empty"><div class="ic">📂</div><div class="et">Kategori kârı yok</div></div></td></tr>';return;}
+  tb.innerHTML=kategoriler.map(k=>`<tr><td><strong>${k.kategori}</strong></td><td><span class="tag musteri">${k.eticaret_tip.toUpperCase()}</span></td><td class="mono">%${(k.kar_orani*100).toFixed(1)}</td><td class="row-act"><button class="btn btn-o btn-sm" onclick='editKategori(${JSON.stringify(k).replace(/'/g,"&#39;")})'>Düzenle</button></td></tr>`).join('');
+}
+function openKategori(){document.getElementById('kmTit').textContent='Kategori Kârı';['kmId','kmAd','kmKar'].forEach(i=>document.getElementById(i).value='');document.getElementById('kategoriModal').classList.remove('hidden');}
+function editKategori(k){document.getElementById('kmTit').textContent='Düzenle';document.getElementById('kmId').value=k.id;document.getElementById('kmAd').value=k.kategori;document.getElementById('kmTip').value=k.eticaret_tip;document.getElementById('kmKar').value=(k.kar_orani*100).toFixed(1);document.getElementById('kategoriModal').classList.remove('hidden');}
+async function saveKategori(){
+  const ad=document.getElementById('kmAd').value.trim().toLowerCase();
+  const kar=parseFloat(document.getElementById('kmKar').value);
+  if(!ad||isNaN(kar)){toast('Kategori ve kâr oranı gerekli','err');return;}
+  const body={kategori:ad,eticaret_tip:document.getElementById('kmTip').value,kar_orani:kar/100,aktif:true};
+  const id=document.getElementById('kmId').value;
+  try{
+    if(id)await api(`kategori_kar?id=eq.${id}`,{method:'PATCH',body:JSON.stringify(body)});
+    else await api('kategori_kar',{method:'POST',body:JSON.stringify(body)});
+    toast('Kaydedildi ✓');closeMo('kategoriModal');loadAll();
+  }catch(e){toast('Hata: '+e.message,'err');}
+}
+
+// ---- KARGO CRUD ----
+function renderKargo(){
+  const tb=document.getElementById('kargoBody');
+  if(!kargolar.length){tb.innerHTML='<tr><td colspan="5"><div class="empty"><div class="ic">📦</div><div class="et">Kargo baremi yok</div></div></td></tr>';return;}
+  tb.innerHTML=kargolar.map(k=>`<tr><td><strong>${k.pazaryeri}</strong></td><td class="mono">${fmtMoney(k.alt_limit)}</td><td class="mono">${k.ust_limit?fmtMoney(k.ust_limit):'∞'}</td><td class="mono bakiye-p">${fmtMoney(k.kargo_ucreti)}</td><td class="row-act"><button class="btn btn-o btn-sm" onclick='editKargo(${JSON.stringify(k).replace(/'/g,"&#39;")})'>Düzenle</button></td></tr>`).join('');
+}
+function openKargo(){document.getElementById('kgTit').textContent='Kargo Baremi';['kgId','kgPazaryeri','kgAlt','kgUst','kgUcret'].forEach(i=>document.getElementById(i).value='');document.getElementById('kargoModal').classList.remove('hidden');}
+function editKargo(k){document.getElementById('kgTit').textContent='Düzenle';document.getElementById('kgId').value=k.id;document.getElementById('kgPazaryeri').value=k.pazaryeri;document.getElementById('kgAlt').value=k.alt_limit;document.getElementById('kgUst').value=k.ust_limit||'';document.getElementById('kgUcret').value=k.kargo_ucreti;document.getElementById('kargoModal').classList.remove('hidden');}
+async function saveKargo(){
+  const py=document.getElementById('kgPazaryeri').value.trim().toLowerCase();
+  const ucret=parseFloat(document.getElementById('kgUcret').value);
+  if(!py||isNaN(ucret)){toast('Pazaryeri ve kargo ücreti gerekli','err');return;}
+  const body={pazaryeri:py,alt_limit:parseFloat(document.getElementById('kgAlt').value)||0,ust_limit:document.getElementById('kgUst').value?parseFloat(document.getElementById('kgUst').value):null,kargo_ucreti:ucret,aktif:true};
+  const id=document.getElementById('kgId').value;
+  try{
+    if(id)await api(`kargo_baremi?id=eq.${id}`,{method:'PATCH',body:JSON.stringify(body)});
+    else await api('kargo_baremi',{method:'POST',body:JSON.stringify(body)});
+    toast('Kaydedildi ✓');closeMo('kargoModal');loadAll();
+  }catch(e){toast('Hata: '+e.message,'err');}
+}
+</script></body></html>

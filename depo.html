@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Depo & Stok — PeaksFood</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+--bg:#0a0e0b;--panel:#101712;--panel2:#16201a;--panel3:#1c2820;--bord:rgba(255,255,255,0.07);--bord2:rgba(255,255,255,0.04);
+--green:#2ee06a;--green2:#22c55e;--gdim:rgba(46,224,106,0.08);--gmid:rgba(46,224,106,0.16);--gglow:rgba(46,224,106,0.25);
+--amber:#f5a623;--adim:rgba(245,166,35,0.09);--amid:rgba(245,166,35,0.18);
+--red:#f15a5a;--rdim:rgba(241,90,90,0.09);--rmid:rgba(241,90,90,0.18);
+--blue:#4a9eff;--bdim:rgba(74,158,255,0.1);
+--purple:#b06cf0;--pdim:rgba(176,108,240,0.1);
+--text:#e6f2e9;--dim:#93a89b;--dim2:#5d6f63;
+--font:'Plus Jakarta Sans',sans-serif;--mono:'JetBrains Mono',monospace;
+--r:12px;--r-sm:9px;--r-lg:16px;
+--shadow:0 4px 24px rgba(0,0,0,0.35);--shadow-sm:0 2px 10px rgba(0,0,0,0.25);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:14px;line-height:1.55;-webkit-font-smoothing:antialiased}
+.hidden{display:none!important}
+/* HEADER */
+.top{height:62px;background:linear-gradient(180deg,var(--panel) 0%,rgba(16,23,18,0.96) 100%);border-bottom:1px solid var(--bord);display:flex;align-items:center;padding:0 24px;gap:16px;position:sticky;top:0;z-index:50;backdrop-filter:blur(8px)}
+.top .logo{font-weight:800;font-size:17px;color:var(--green);display:flex;align-items:center;gap:8px;letter-spacing:-0.02em}
+.top .back{margin-left:auto;color:var(--dim);text-decoration:none;padding:9px 16px;border:1px solid var(--bord);border-radius:var(--r-sm);font-size:13px;font-weight:500;transition:.18s;display:flex;align-items:center;gap:6px}
+.top .back:hover{background:var(--panel2);color:var(--text);border-color:var(--gmid)}
+.top .user{color:var(--dim);font-size:13px;display:flex;align-items:center;gap:8px}
+.top .user b{color:var(--text);font-weight:600}
+/* LOGIN */
+.lw{position:fixed;inset:0;background:radial-gradient(ellipse at top,#0f1712 0%,var(--bg) 70%);display:flex;align-items:center;justify-content:center;z-index:100}
+.lw .card{background:var(--panel);border:1px solid var(--bord);border-radius:var(--r-lg);padding:40px;width:360px;box-shadow:var(--shadow)}
+.lw h1{font-size:22px;margin-bottom:6px;color:var(--green);font-weight:800;letter-spacing:-0.02em}
+.lw p{color:var(--dim);font-size:13px;margin-bottom:26px}
+.lw input{width:100%;padding:13px 15px;background:var(--panel2);border:1px solid var(--bord);border-radius:var(--r-sm);color:var(--text);font-family:var(--font);font-size:14px;margin-bottom:12px;transition:.15s}
+.lw input:focus{outline:none;border-color:var(--gmid);box-shadow:0 0 0 3px var(--gdim)}
+.lw button{width:100%;padding:13px;background:linear-gradient(135deg,var(--green) 0%,var(--green2) 100%);color:#04210f;border:none;border-radius:var(--r-sm);font-weight:700;font-size:14px;cursor:pointer;font-family:var(--font);transition:.18s;margin-top:4px}
+.lw button:hover{filter:brightness(1.08);box-shadow:0 4px 18px var(--gglow)}
+.lw .err{color:var(--red);font-size:12px;margin-bottom:12px;min-height:16px}
+/* LAYOUT */
+.wrap{max-width:1400px;margin:0 auto;padding:32px 24px}
+.head{display:flex;align-items:center;gap:14px;margin-bottom:26px;flex-wrap:wrap}
+.head h2{font-size:26px;font-weight:800;letter-spacing:-0.03em}
+.head .sub{color:var(--dim);font-size:13px}
+.head .sp{flex:1}
+/* CARDS / STATS */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:16px;margin-bottom:28px}
+.stat{background:var(--panel);border:1px solid var(--bord);border-radius:var(--r);padding:20px 22px;transition:.2s;position:relative;overflow:hidden}
+.stat::before{content:'';position:absolute;top:0;left:0;width:3px;height:100%;background:var(--dim2);opacity:.4}
+.stat.green::before{background:var(--green)}
+.stat.red::before{background:var(--red)}
+.stat.amber::before{background:var(--amber)}
+.stat.blue::before{background:var(--blue)}
+.stat:hover{border-color:var(--bord);transform:translateY(-1px);box-shadow:var(--shadow-sm)}
+.stat .lbl{color:var(--dim);font-size:11px;font-weight:600;margin-bottom:10px;text-transform:uppercase;letter-spacing:.6px}
+.stat .val{font-size:25px;font-weight:700;font-family:var(--mono);letter-spacing:-0.02em}
+.stat.green .val{color:var(--green)}
+.stat.red .val{color:var(--red)}
+.stat.amber .val{color:var(--amber)}
+.stat.blue .val{color:var(--blue)}
+/* TOOLBAR */
+.tbar{display:flex;gap:10px;margin-bottom:18px;flex-wrap:wrap;align-items:center}
+.tbar input,.tbar select{padding:11px 14px;background:var(--panel2);border:1px solid var(--bord);border-radius:var(--r-sm);color:var(--text);font-family:var(--font);font-size:13px;transition:.15s}
+.tbar input::placeholder{color:var(--dim2)}
+.tbar input:focus,.tbar select:focus{outline:none;border-color:var(--gmid);box-shadow:0 0 0 3px var(--gdim)}
+.tbar .search{flex:1;min-width:200px}
+.btn{padding:11px 18px;border-radius:var(--r-sm);border:none;font-weight:600;font-size:13px;cursor:pointer;font-family:var(--font);display:inline-flex;align-items:center;gap:6px;transition:.18s}
+.btn-g{background:linear-gradient(135deg,var(--green) 0%,var(--green2) 100%);color:#04210f;box-shadow:0 2px 12px var(--gdim)}
+.btn-g:hover{filter:brightness(1.08);box-shadow:0 4px 18px var(--gglow);transform:translateY(-1px)}
+.btn-o{background:var(--panel2);border:1px solid var(--bord);color:var(--text)}
+.btn-o:hover{background:var(--panel3);border-color:var(--gmid)}
+.btn-r{background:var(--rdim);color:var(--red);border:1px solid var(--rmid)}
+.btn-sm{padding:7px 12px;font-size:12px}
+/* TABLE */
+.tablewrap{background:var(--panel);border:1px solid var(--bord);border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow-sm)}
+table{width:100%;border-collapse:collapse}
+th{text-align:left;padding:14px 18px;font-size:11px;font-weight:700;color:var(--dim);text-transform:uppercase;letter-spacing:.6px;border-bottom:1px solid var(--bord);background:var(--panel2);white-space:nowrap}
+td{padding:15px 18px;border-bottom:1px solid var(--bord2);font-size:13.5px}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:var(--gdim)}
+.tag{display:inline-block;padding:4px 11px;border-radius:7px;font-size:11px;font-weight:600;letter-spacing:.2px}
+.tag.musteri{background:var(--bdim);color:var(--blue)}
+.tag.tedarikci{background:var(--adim);color:var(--amber)}
+.tag.her_ikisi{background:var(--pdim);color:var(--purple)}
+.bakiye-p{color:var(--green);font-weight:700;font-family:var(--mono)}
+.bakiye-n{color:var(--red);font-weight:700;font-family:var(--mono)}
+.bakiye-z{color:var(--dim);font-family:var(--mono)}
+.row-act{display:flex;gap:7px}
+.empty{text-align:center;padding:64px 20px;color:var(--dim2)}
+.empty .ic{font-size:48px;margin-bottom:14px;opacity:.35}
+.empty .et{font-size:15px;font-weight:600;color:var(--dim);margin-bottom:6px}
+.empty .es{font-size:13px;color:var(--dim2)}
+/* MODAL */
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.65);display:flex;align-items:flex-start;justify-content:center;z-index:90;padding:30px 20px;overflow-y:auto;backdrop-filter:blur(4px)}
+.modal .box{background:var(--panel);border:1px solid var(--bord);border-radius:var(--r-lg);width:100%;max-width:680px;margin:auto;box-shadow:var(--shadow)}
+.modal .mh{padding:20px 24px;border-bottom:1px solid var(--bord);display:flex;align-items:center;gap:10px}
+.modal .mh h3{font-size:18px;font-weight:700;letter-spacing:-0.02em}
+.modal .mh .x{margin-left:auto;background:none;border:none;color:var(--dim);font-size:22px;cursor:pointer;line-height:1}
+.modal .mb{padding:24px}
+.modal .mf{padding:18px 24px;border-top:1px solid var(--bord);display:flex;gap:10px;justify-content:flex-end}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
+.fld{margin-bottom:16px}
+.fld label{display:block;font-size:12px;color:var(--dim);margin-bottom:7px;font-weight:600}
+.fld label .req{color:var(--red)}
+.fld input,.fld select,.fld textarea{width:100%;padding:11px 14px;background:var(--panel2);border:1px solid var(--bord);border-radius:var(--r-sm);color:var(--text);font-family:var(--font);font-size:13.5px;transition:.15s}
+.fld input::placeholder{color:var(--dim2)}
+.fld input:focus,.fld select:focus,.fld textarea:focus{outline:none;border-color:var(--gmid);box-shadow:0 0 0 3px var(--gdim)}
+.fld textarea{resize:vertical;min-height:64px}
+.sec-t{font-size:11px;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:.7px;margin:24px 0 14px;padding-bottom:8px;border-bottom:1px solid var(--bord);display:flex;align-items:center;gap:8px}
+.sec-t:first-child{margin-top:0}
+/* EKSTRE */
+.ekstre-tbl td{font-size:12.5px}
+.toast{position:fixed;bottom:24px;right:24px;background:var(--panel);border:1px solid var(--green);border-radius:var(--r);padding:15px 20px;font-size:13px;font-weight:500;z-index:200;box-shadow:var(--shadow);animation:slidein .25s cubic-bezier(.2,.8,.2,1)}
+.toast.err{border-color:var(--red)}
+@keyframes slidein{from{transform:translateX(20px);opacity:0}to{transform:translateX(0);opacity:1}}
+.loading{text-align:center;padding:48px;color:var(--dim)}
+.spin{display:inline-block;width:22px;height:22px;border:2.5px solid var(--bord);border-top-color:var(--green);border-radius:50%;animation:sp 0.7s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+@media(max-width:680px){.grid2,.grid3{grid-template-columns:1fr}.stats{grid-template-columns:1fr 1fr}.wrap{padding:20px 16px}}
+/* KANAL TABS */
+.kanal-tabs{display:flex;gap:7px;margin-bottom:24px;flex-wrap:wrap;background:var(--panel);padding:6px;border-radius:var(--r);border:1px solid var(--bord)}
+.ktab{padding:10px 18px;background:transparent;border:none;color:var(--dim);font-family:var(--font);font-size:13px;font-weight:600;cursor:pointer;border-radius:var(--r-sm);transition:.18s}
+.ktab:hover{color:var(--text);background:var(--panel2)}
+.ktab.active{color:#04210f;background:linear-gradient(135deg,var(--green) 0%,var(--green2) 100%);box-shadow:0 2px 10px var(--gdim)}
+/* MUTABAKAT */
+.mut-platform{display:inline-block;padding:3px 9px;border-radius:6px;font-size:11px;font-weight:600;background:var(--pdim);color:var(--purple)}
+.dr-bekliyor{background:var(--adim);color:var(--amber);padding:3px 9px;border-radius:6px;font-size:11px;font-weight:600}
+.dr-mutabik{background:var(--gdim);color:var(--green);padding:3px 9px;border-radius:6px;font-size:11px;font-weight:600}
+.dr-farkli{background:var(--rdim);color:var(--red);padding:3px 9px;border-radius:6px;font-size:11px;font-weight:600}
+.dr-odendi{background:var(--bdim);color:var(--blue);padding:3px 9px;border-radius:6px;font-size:11px;font-weight:600}
+.fark-p{color:var(--green);font-weight:600;font-family:var(--mono)}
+.fark-n{color:var(--red);font-weight:600;font-family:var(--mono)}
+</style>
+</head>
+<body>
+<!-- LOGIN -->
+<div class="lw" id="lw">
+  <div class="card">
+    <h1>🏭 Depo & Stok</h1>
+    <p>PeaksFood — devam etmek için giriş yapın</p>
+    <div class="err" id="lerr"></div>
+    <input id="lad" placeholder="Kullanıcı adı" autocomplete="username">
+    <input id="lsifre" type="password" placeholder="Şifre" autocomplete="current-password">
+    <button onclick="login()">Giriş Yap</button>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app" class="hidden">
+  <div class="top">
+    <div class="logo">🏭 PeaksFood</div>
+    <a href="admin-panel.html" class="back">← Panele Dön</a>
+    <div class="user" id="uad"></div>
+  </div>
+
+  <div class="wrap">
+    <div class="head">
+      <h2>Depo & Stok Yönetimi</h2>
+      <div class="sub">Çoklu depo · fiili/gerçek stok · virman</div>
+      <div class="sp"></div>
+      <button class="btn btn-o" onclick="openVirman()">🔄 Virman</button>
+      <button class="btn btn-g" onclick="openDepo()">+ Yeni Depo</button>
+    </div>
+
+    <!-- STATS -->
+    <div class="stats" id="stats"></div>
+
+    <!-- KANAL TABS -->
+    <div class="kanal-tabs">
+      <button class="ktab active" onclick="setKanal('',this)">Tüm Depolar</button>
+      <button class="ktab" onclick="setKanal('reel',this)">Reel</button>
+      <button class="ktab" onclick="setKanal('eticaret',this)">E-ticaret</button>
+      <button class="ktab" onclick="setKanal('uretim',this)">Üretim</button>
+      <button class="ktab" onclick="setKanal('transit',this)">Transit</button>
+    </div>
+
+    <!-- TOOLBAR -->
+    <div class="tbar">
+      <input class="search" id="search" placeholder="🔍 Depo ara (ad, şehir)..." oninput="render()">
+      <select id="sehirFilter" onchange="render()"><option value="">Tüm Şehirler</option></select>
+    </div>
+
+    <!-- DEPO TABLOSU -->
+    <div class="tablewrap" style="margin-bottom:32px">
+      <table>
+        <thead><tr>
+          <th>Depo</th><th>Kanal</th><th>Şehir</th><th>Üst Depo</th>
+          <th>Kalem Çeşidi</th><th>Durum</th><th></th>
+        </tr></thead>
+        <tbody id="depoBody"><tr><td colspan="7"><div class="loading"><span class="spin"></span></div></td></tr></tbody>
+      </table>
+    </div>
+
+    <!-- STOK BAŞLIK -->
+    <div class="head" style="margin-top:8px">
+      <h2 style="font-size:20px">📦 Depo Stokları</h2>
+      <div class="sp"></div>
+      <select id="stokDepoFilter" onchange="loadStok()" style="padding:11px 14px;background:var(--panel2);border:1px solid var(--bord);border-radius:var(--r-sm);color:var(--text);font-size:13px">
+        <option value="">Depo seçin...</option>
+      </select>
+    </div>
+    <div class="tablewrap">
+      <table>
+        <thead><tr>
+          <th>Ürün / Hammadde</th><th>Tip</th><th>Raf</th>
+          <th>Fiili Stok</th><th>Rezerve</th><th>Gerçek Stok</th><th>Transit</th>
+        </tr></thead>
+        <tbody id="stokBody"><tr><td colspan="7"><div class="empty"><div class="ic">📦</div><div class="et">Depo seçin</div><div class="es">Stokları görmek için yukarıdan bir depo seçin</div></div></td></tr></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- DEPO MODAL -->
+<div class="modal hidden" id="depoModal">
+  <div class="box">
+    <div class="mh"><h3 id="depoModalTit">Yeni Depo</h3><button class="x" onclick="closeMo('depoModal')">×</button></div>
+    <div class="mb">
+      <input type="hidden" id="depoId">
+      <div class="fld"><label>Depo Adı <span class="req">*</span></label><input id="dAd" placeholder="örn: İzmir Bornova Deposu"></div>
+      <div class="grid2">
+        <div class="fld"><label>Kanal <span class="req">*</span></label>
+          <select id="dKanal" onchange="dKanalChange()">
+            <option value="reel">Reel (fiziksel)</option>
+            <option value="eticaret">E-ticaret</option>
+            <option value="uretim">Üretim</option>
+            <option value="transit">Transit</option>
+          </select>
+        </div>
+        <div class="fld" id="dEticaretTipFld" style="display:none"><label>E-ticaret Tipi</label>
+          <select id="dEticaretTip"><option value="b2c">B2C (bireysel)</option><option value="b2b">B2B (kurumsal)</option></select>
+        </div>
+      </div>
+      <div class="grid2">
+        <div class="fld"><label>Şehir</label><input id="dSehir" placeholder="İzmir"></div>
+        <div class="fld"><label>İlçe</label><input id="dIlce" placeholder="Bornova"></div>
+      </div>
+      <div class="fld"><label>Üst Depo (opsiyonel — hiyerarşi için)</label><select id="dUstDepo"><option value="">— Yok (ana depo) —</option></select></div>
+      <div class="fld"><label>Adres</label><textarea id="dAdres" placeholder="Açık adres..."></textarea></div>
+      <div class="fld" id="dPazaryeriFld" style="display:none"><label>Pazaryeri Platformu</label><input id="dPazaryeri" placeholder="trendyol / hepsiburada"></div>
+    </div>
+    <div class="mf">
+      <button class="btn btn-o" onclick="closeMo('depoModal')">İptal</button>
+      <button class="btn btn-g" onclick="saveDepo()">Kaydet</button>
+    </div>
+  </div>
+</div>
+
+<!-- VİRMAN MODAL -->
+<div class="modal hidden" id="virmanModal">
+  <div class="box">
+    <div class="mh"><h3>🔄 Depo Virman (transfer)</h3><button class="x" onclick="closeMo('virmanModal')">×</button></div>
+    <div class="mb">
+      <div class="grid2">
+        <div class="fld"><label>Kaynak Depo <span class="req">*</span></label><select id="vKaynak" onchange="loadVirmanStok()"></select></div>
+        <div class="fld"><label>Hedef Depo <span class="req">*</span></label><select id="vHedef"></select></div>
+      </div>
+      <div class="fld"><label>Kalem Tipi</label>
+        <select id="vKalemTip" onchange="loadVirmanKalemler()">
+          <option value="urun">Ürün</option><option value="hammadde">Hammadde</option><option value="paket">Paket/Ambalaj</option>
+        </select>
+      </div>
+      <div class="fld"><label>Kalem <span class="req">*</span></label><select id="vKalem"></select></div>
+      <div class="fld"><label>Miktar <span class="req">*</span></label><input type="number" id="vMiktar" placeholder="0" min="0" step="0.01"></div>
+      <div class="fld"><label>Açıklama</label><input id="vAciklama" placeholder="Transfer sebebi..."></div>
+      <div class="al-info" style="background:var(--bdim);border:1px solid var(--blue);border-radius:var(--r-sm);padding:12px 14px;font-size:12px;color:var(--blue)">
+        ℹ️ Virman başlatılınca mal "yolda" (transit) durumuna geçer. Hedef depoda <b>Tamamla</b> ile teslim alınır.
+      </div>
+    </div>
+    <div class="mf">
+      <button class="btn btn-o" onclick="closeMo('virmanModal')">İptal</button>
+      <button class="btn btn-g" onclick="saveVirman()">Virman Başlat</button>
+    </div>
+  </div>
+</div>
+
+<div id="virmanListWrap" class="wrap" style="display:none"></div>
+
+<script>
+const SB='https://ubnsszlwyhlmpoukfihw.supabase.co';
+const KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVibnNzemx3eWhsbXBvdWtmaWh3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU3NTU4MzAsImV4cCI6MjA5MTMzMTgzMH0.K1kTRAGBlvxx2VKMfagXaZgrbXYaQAbK5UyJwzal4a0';
+const H={'apikey':KEY,'Authorization':`Bearer ${KEY}`,'Content-Type':'application/json','Prefer':'return=representation'};
+let CU=null, allDepo=[], allStok=[], curKanal='';
+
+async function api(path,opts={}){
+  const r=await fetch(`${SB}/rest/v1/${path}`,{...opts,headers:{...H,...(opts.headers||{})}});
+  if(!r.ok){const t=await r.text();throw new Error(t||r.status);}
+  if(r.status===204)return null;
+  const t=await r.text();return t?JSON.parse(t):null;
+}
+async function rpc(fn,params){
+  const r=await fetch(`${SB}/rest/v1/rpc/${fn}`,{method:'POST',headers:H,body:JSON.stringify(params)});
+  if(!r.ok){const t=await r.text();throw new Error(t||r.status);}
+  const t=await r.text();return t?JSON.parse(t):null;
+}
+
+window.addEventListener('DOMContentLoaded',()=>{
+  try{const s=localStorage.getItem('pf_session');if(s){CU=JSON.parse(s);showApp();}}catch(e){localStorage.removeItem('pf_session');}
+});
+document.getElementById('lsifre')?.addEventListener('keydown',e=>{if(e.key==='Enter')login();});
+
+async function login(){
+  const ad=document.getElementById('lad').value.trim();
+  const sifre=document.getElementById('lsifre').value;
+  const err=document.getElementById('lerr');err.textContent='';
+  if(!ad||!sifre){err.textContent='Kullanıcı adı ve şifre gerekli';return;}
+  try{
+    const res=await rpc('kullanici_giris',{p_ad:ad,p_sifre:sifre});
+    if(!res||!res.length){err.textContent='Kullanıcı adı veya şifre hatalı';return;}
+    CU=res[0];
+    localStorage.setItem('pf_session',JSON.stringify({id:CU.id,ad:CU.ad,rol:CU.rol,email:CU.email||null}));
+    showApp();
+  }catch(e){err.textContent='Giriş hatası: '+e.message;}
+}
+function showApp(){
+  document.getElementById('lw').classList.add('hidden');
+  document.getElementById('app').classList.remove('hidden');
+  document.getElementById('uad').innerHTML=`<b>${CU.ad}</b> · ${CU.rol}`;
+  loadAll();
+}
+function logout(){CU=null;try{localStorage.removeItem('pf_session');}catch(e){}location.reload();}
+
+async function loadAll(){
+  try{
+    allDepo=await api('depo?silindi_mi=eq.false&order=ad.asc')||[];
+    renderStats();
+    fillSehirFilter();
+    fillDepoSelects();
+    render();
+    // ilk depoyu stok için seç
+    if(allDepo.length){document.getElementById('stokDepoFilter').value=allDepo[0].id;loadStok();}
+  }catch(e){
+    document.getElementById('depoBody').innerHTML=`<tr><td colspan="7"><div class="empty"><div class="et">Yükleme hatası</div><div class="es">${e.message}</div></div></td></tr>`;
+  }
+}
+
+function renderStats(){
+  const reel=allDepo.filter(d=>d.kanal==='reel').length;
+  const etic=allDepo.filter(d=>d.kanal==='eticaret').length;
+  const uretim=allDepo.filter(d=>d.kanal==='uretim').length;
+  document.getElementById('stats').innerHTML=`
+    <div class="stat green"><div class="lbl">Toplam Depo</div><div class="val">${allDepo.length}</div></div>
+    <div class="stat blue"><div class="lbl">Reel Depo</div><div class="val">${reel}</div></div>
+    <div class="stat amber"><div class="lbl">E-ticaret Depo</div><div class="val">${etic}</div></div>
+    <div class="stat"><div class="lbl">Üretim Depo</div><div class="val">${uretim}</div></div>`;
+}
+
+function fillSehirFilter(){
+  const sehirler=[...new Set(allDepo.map(d=>d.sehir).filter(Boolean))].sort();
+  document.getElementById('sehirFilter').innerHTML='<option value="">Tüm Şehirler</option>'+sehirler.map(s=>`<option value="${s}">${s}</option>`).join('');
+}
+
+function fillDepoSelects(){
+  const opts=allDepo.map(d=>`<option value="${d.id}">${d.ad}</option>`).join('');
+  document.getElementById('stokDepoFilter').innerHTML='<option value="">Depo seçin...</option>'+opts;
+  document.getElementById('dUstDepo').innerHTML='<option value="">— Yok (ana depo) —</option>'+opts;
+  document.getElementById('vKaynak').innerHTML=opts;
+  document.getElementById('vHedef').innerHTML=opts;
+}
+
+function setKanal(k,el){curKanal=k;document.querySelectorAll('.ktab').forEach(t=>t.classList.remove('active'));el.classList.add('active');render();}
+
+function render(){
+  const q=document.getElementById('search').value.toLowerCase();
+  const sehir=document.getElementById('sehirFilter').value;
+  let data=allDepo;
+  if(curKanal)data=data.filter(d=>d.kanal===curKanal);
+  if(sehir)data=data.filter(d=>d.sehir===sehir);
+  if(q)data=data.filter(d=>(d.ad||'').toLowerCase().includes(q)||(d.sehir||'').toLowerCase().includes(q));
+
+  const tb=document.getElementById('depoBody');
+  if(!data.length){tb.innerHTML='<tr><td colspan="7"><div class="empty"><div class="ic">🏭</div><div class="et">Depo bulunamadı</div><div class="es">+ Yeni Depo ile ilk deponuzu ekleyin</div></div></td></tr>';return;}
+
+  const kanalTag={reel:'tedarikci',eticaret:'musteri',uretim:'her_ikisi',transit:'her_ikisi'};
+  const kanalAd={reel:'Reel',eticaret:'E-ticaret',uretim:'Üretim',transit:'Transit'};
+  tb.innerHTML=data.map(d=>{
+    const ust=allDepo.find(x=>x.id===d.ust_depo_id);
+    const etiket=d.eticaret_tip?` <span style="font-size:10px;color:var(--dim2)">(${d.eticaret_tip.toUpperCase()})</span>`:'';
+    return `<tr>
+      <td><strong>${d.ad}</strong>${etiket}${d.adres?`<div style="font-size:11px;color:var(--dim2)">${d.adres}</div>`:''}</td>
+      <td><span class="tag ${kanalTag[d.kanal]||'musteri'}">${kanalAd[d.kanal]||d.kanal}</span></td>
+      <td>${d.sehir||'—'}${d.ilce?' / '+d.ilce:''}</td>
+      <td>${ust?ust.ad:'<span style="color:var(--dim2)">—</span>'}</td>
+      <td><span id="cesit_${d.id}" style="color:var(--dim)">...</span></td>
+      <td>${d.aktif!==false?'<span class="dr-mutabik">Aktif</span>':'<span class="dr-farkli">Pasif</span>'}</td>
+      <td class="row-act"><button class="btn btn-o btn-sm" onclick='editDepo(${JSON.stringify(d).replace(/'/g,"&#39;")})'>Düzenle</button></td>
+    </tr>`;
+  }).join('');
+  // kalem çeşidi sayısını çek
+  data.forEach(async d=>{
+    try{const s=await api(`depo_stok?depo_id=eq.${d.id}&select=id`);const el=document.getElementById('cesit_'+d.id);if(el)el.textContent=(s?.length||0)+' çeşit';}catch(e){}
+  });
+}
+
+async function loadStok(){
+  const depoId=document.getElementById('stokDepoFilter').value;
+  const tb=document.getElementById('stokBody');
+  if(!depoId){tb.innerHTML='<tr><td colspan="7"><div class="empty"><div class="ic">📦</div><div class="et">Depo seçin</div></div></td></tr>';return;}
+  tb.innerHTML='<tr><td colspan="7"><div class="loading"><span class="spin"></span></div></td></tr>';
+  try{
+    const stok=await api(`depo_stok?depo_id=eq.${depoId}&order=son_hareket.desc`)||[];
+    if(!stok.length){tb.innerHTML='<tr><td colspan="7"><div class="empty"><div class="ic">📦</div><div class="et">Bu depoda stok yok</div><div class="es">Mal kabul veya virman ile stok girişi yapın</div></div></td></tr>';return;}
+    // kalem adlarını çek
+    const urunIds=stok.filter(s=>s.urun_id).map(s=>s.urun_id);
+    const hamIds=stok.filter(s=>s.hammadde_id).map(s=>s.hammadde_id);
+    let urunMap={},hamMap={};
+    if(urunIds.length){const u=await api(`urun?id=in.(${urunIds.join(',')})&select=id,ad,sku`)||[];u.forEach(x=>urunMap[x.id]=x);}
+    if(hamIds.length){const h=await api(`hammadde?id=in.(${hamIds.join(',')})&select=id,ad`)||[];h.forEach(x=>hamMap[x.id]=x);}
+    const tipTag={urun:'musteri',hammadde:'tedarikci',paket:'her_ikisi'};
+    tb.innerHTML=stok.map(s=>{
+      let ad='—',sku='';
+      if(s.urun_id&&urunMap[s.urun_id]){ad=urunMap[s.urun_id].ad;sku=urunMap[s.urun_id].sku||'';}
+      else if(s.hammadde_id&&hamMap[s.hammadde_id]){ad=hamMap[s.hammadde_id].ad;}
+      const gercek=parseFloat(s.gercek_stok)||0;
+      return `<tr>
+        <td><strong>${ad}</strong>${sku?`<div style="font-size:11px;color:var(--dim2)" class="mono">${sku}</div>`:''}</td>
+        <td><span class="tag ${tipTag[s.kalem_tip]}">${s.kalem_tip}</span></td>
+        <td class="mono">${s.raf_kodu||'—'}</td>
+        <td class="mono"><strong>${fmt(s.fiili_stok)}</strong></td>
+        <td class="mono" style="color:var(--amber)">${fmt(s.rezerve_stok)}</td>
+        <td class="mono ${gercek>0?'bakiye-p':'bakiye-z'}">${fmt(gercek)}</td>
+        <td class="mono" style="color:${s.transit_stok>0?'var(--blue)':'var(--dim2)'}">${fmt(s.transit_stok)}</td>
+      </tr>`;
+    }).join('');
+  }catch(e){tb.innerHTML=`<tr><td colspan="7"><div class="empty"><div class="et">Hata</div><div class="es">${e.message}</div></div></td></tr>`;}
+}
+
+function fmt(n){return (parseFloat(n)||0).toLocaleString('tr-TR',{maximumFractionDigits:2});}
+
+// ---- DEPO CRUD ----
+function openDepo(){document.getElementById('depoModalTit').textContent='Yeni Depo';document.getElementById('depoId').value='';['dAd','dSehir','dIlce','dAdres','dPazaryeri'].forEach(i=>document.getElementById(i).value='');document.getElementById('dKanal').value='reel';dKanalChange();document.getElementById('depoModal').classList.remove('hidden');}
+function editDepo(d){document.getElementById('depoModalTit').textContent='Depo Düzenle';document.getElementById('depoId').value=d.id;document.getElementById('dAd').value=d.ad||'';document.getElementById('dKanal').value=d.kanal||'reel';document.getElementById('dEticaretTip').value=d.eticaret_tip||'b2c';document.getElementById('dSehir').value=d.sehir||'';document.getElementById('dIlce').value=d.ilce||'';document.getElementById('dUstDepo').value=d.ust_depo_id||'';document.getElementById('dAdres').value=d.adres||'';document.getElementById('dPazaryeri').value=d.pazaryeri_platform||'';dKanalChange();document.getElementById('depoModal').classList.remove('hidden');}
+function dKanalChange(){const k=document.getElementById('dKanal').value;document.getElementById('dEticaretTipFld').style.display=k==='eticaret'?'block':'none';document.getElementById('dPazaryeriFld').style.display=k==='eticaret'?'block':'none';}
+async function saveDepo(){
+  const id=document.getElementById('depoId').value;
+  const ad=document.getElementById('dAd').value.trim();
+  if(!ad){toast('Depo adı gerekli','err');return;}
+  const kanal=document.getElementById('dKanal').value;
+  const body={ad,kanal,sehir:document.getElementById('dSehir').value||null,ilce:document.getElementById('dIlce').value||null,ust_depo_id:document.getElementById('dUstDepo').value||null,adres:document.getElementById('dAdres').value||null,aktif:true};
+  if(kanal==='eticaret'){body.eticaret_tip=document.getElementById('dEticaretTip').value;body.pazaryeri_platform=document.getElementById('dPazaryeri').value||null;}
+  try{
+    if(id)await api(`depo?id=eq.${id}`,{method:'PATCH',body:JSON.stringify(body)});
+    else await api('depo',{method:'POST',body:JSON.stringify(body)});
+    toast('Depo kaydedildi ✓');closeMo('depoModal');loadAll();
+  }catch(e){toast('Hata: '+e.message,'err');}
+}
+
+// ---- VİRMAN ----
+function openVirman(){if(allDepo.length<2){toast('Virman için en az 2 depo gerekli','err');return;}fillDepoSelects();loadVirmanKalemler();document.getElementById('virmanModal').classList.remove('hidden');}
+async function loadVirmanKalemler(){
+  const tip=document.getElementById('vKalemTip').value;
+  let data=[];
+  try{
+    if(tip==='urun')data=await api('urun?select=id,ad,sku&order=ad.asc')||[];
+    else if(tip==='hammadde')data=await api('hammadde?select=id,ad&order=ad.asc')||[];
+    else data=await api('paket?select=id,ad&order=ad.asc')||[];
+  }catch(e){}
+  document.getElementById('vKalem').innerHTML=data.map(x=>`<option value="${x.id}">${x.ad}${x.sku?' ('+x.sku+')':''}</option>`).join('');
+}
+function loadVirmanStok(){}
+async function saveVirman(){
+  const kaynak=document.getElementById('vKaynak').value;
+  const hedef=document.getElementById('vHedef').value;
+  const tip=document.getElementById('vKalemTip').value;
+  const kalem=document.getElementById('vKalem').value;
+  const miktar=parseFloat(document.getElementById('vMiktar').value);
+  if(kaynak===hedef){toast('Kaynak ve hedef depo aynı olamaz','err');return;}
+  if(!kalem||!miktar||miktar<=0){toast('Kalem ve geçerli miktar gerekli','err');return;}
+  try{
+    await rpc('depo_virman_baslat',{p_kaynak:kaynak,p_hedef:hedef,p_kalem_tip:tip,p_kalem_id:kalem,p_miktar:miktar,p_yapan_id:CU.id,p_yapan_ad:CU.ad});
+    toast('Virman başlatıldı (transit) ✓');closeMo('virmanModal');loadAll();
+    if(document.getElementById('stokDepoFilter').value)loadStok();
+  }catch(e){toast('Hata: '+e.message,'err');}
+}
+
+function closeMo(id){document.getElementById(id).classList.add('hidden');}
+function toast(msg,type){const t=document.createElement('div');t.className='toast'+(type==='err'?' err':'');t.textContent=msg;document.body.appendChild(t);setTimeout(()=>t.remove(),3000);}
+</script>
+</body>
+</html>

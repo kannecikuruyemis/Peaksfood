@@ -1,0 +1,29 @@
+{
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "rewrites": [
+    { "source": "/admin-panel", "destination": "/admin-panel.html" },
+    { "source": "/depo", "destination": "/depo.html" },
+    { "source": "/mal-kabul", "destination": "/mal-kabul.html" },
+    { "source": "/uretim", "destination": "/uretim.html" },
+    { "source": "/pazaryeri", "destination": "/pazaryeri.html" },
+    { "source": "/siparis", "destination": "/siparis.html" },
+    { "source": "/rota", "destination": "/rota.html" },
+    { "source": "/muhasebe", "destination": "/muhasebe.html" },
+    { "source": "/cari", "destination": "/cari.html" },
+    { "source": "/ai", "destination": "/ai.html" },
+    { "source": "/superadmin", "destination": "/superadmin.html" },
+    { "source": "/personel-giris", "destination": "/personel-giris.html" },
+    { "source": "/personel-gorevler", "destination": "/personel-gorevler.html" },
+    { "source": "/mobil-hammadde-toplama", "destination": "/mobil-hammadde-toplama.html" },
+    { "source": "/mobil-paket-toplama", "destination": "/mobil-paket-toplama.html" },
+    { "source": "/mobil-uretim-bitti", "destination": "/mobil-uretim-bitti.html" },
+    { "source": "/web-etiket", "destination": "/web-etiket.html" }
+  ],
+  "functions": {
+    "api/sentos.js": {
+      "memory": 256,
+      "maxDuration": 30
+    }
+  }
+}
